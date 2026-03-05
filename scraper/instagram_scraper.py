@@ -576,7 +576,7 @@ def scrape_instagram():
                             "venue": refined.get("venue") if refined else "MJCET Campus",
                             "category": refined.get("category") if refined else "General",
                             "last_register_date": refined.get("last_register_date") or "TBA",
-                            "is_published": True if actual_date else False # Auto-publish if we have a real date!
+                            "is_published": False
                         }
 
                         if not existing:
