@@ -573,6 +573,7 @@ def scrape_instagram():
                             "registration_link": refined.get("registration_link") if refined else None,
                             "date_str": refined.get("event_date") or "TBA",
                             "event_date": actual_date,
+                            "time": refined.get("event_time"),
                             "venue": refined.get("venue") if refined else "MJCET Campus",
                             "category": refined.get("category") if refined else "General",
                             "last_register_date": refined.get("last_register_date") or "TBA",

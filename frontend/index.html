@@ -144,8 +144,18 @@
                         <input type="text" id="editDate" placeholder="2026-03-24">
                     </div>
                     <div class="form-group">
+                        <label>Time (HH:MM)</label>
+                        <input type="time" id="editTime">
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
                         <label>Venue</label>
                         <input type="text" id="editVenue" placeholder="MJCET Campus">
+                    </div>
+                    <div class="form-group">
+                        <label>Source URL (Instagram/Site)</label>
+                        <input type="text" id="editSourceUrl" placeholder="https://instagram.com/p/...">
                     </div>
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
@@ -440,9 +450,7 @@
                         </div>
                         <button class="mini-action-btn rate" onclick="handleRateClick(event, ${event.id})">⭐ Rate</button>
                     </div>
-                    <div class="card-image-wrap">
-                        <img src="${img}" alt="${event.title}" onerror="this.src='https://via.placeholder.com/340x200?text=Event'">
-                    </div>
+                    ${(img && img !== '') ? `<div class="card-image-wrap"><img src="${img}" alt="${event.title}" onerror="this.style.display='none'"></div>` : ''}
                     <div class="card-content">
                         <div class="rating-line">${reviewsText}</div>
                         <h3 class="event-title-main">${event.title || 'Event by ' + clubName}</h3>
@@ -586,8 +594,10 @@
             document.getElementById('editTitle').value = '';
             document.getElementById('editClubName').value = '';
             document.getElementById('editDate').value = '';
+            document.getElementById('editTime').value = '';
             document.getElementById('editCategory').value = 'General';
             document.getElementById('editVenue').value = 'MJCET Campus';
+            document.getElementById('editSourceUrl').value = '';
             document.getElementById('editRegLink').value = '';
             document.getElementById('editDesc').value = '';
             document.getElementById('editImagePath').value = '';
@@ -603,8 +613,10 @@
             document.getElementById('editTitle').value = event.title || '';
             document.getElementById('editClubName').value = event.club_name || '';
             document.getElementById('editDate').value = event.date_str || (event.event_date ? event.event_date.split('T')[0] : '');
+            document.getElementById('editTime').value = event.time || '';
             document.getElementById('editCategory').value = event.category || 'General';
             document.getElementById('editVenue').value = event.venue || '';
+            document.getElementById('editSourceUrl').value = event.source_url || '';
             document.getElementById('editRegLink').value = event.registration_link || '';
             document.getElementById('editDesc').value = event.description || '';
             document.getElementById('editImagePath').value = event.image_path || '';
@@ -645,8 +657,10 @@
                 title: title,
                 club_name: club_name,
                 event_date: event_date,
+                time: document.getElementById('editTime').value,
                 category: document.getElementById('editCategory').value,
                 venue: document.getElementById('editVenue').value,
+                source_url: document.getElementById('editSourceUrl').value,
                 registration_link: document.getElementById('editRegLink').value,
                 description: document.getElementById('editDesc').value,
                 image_path: imagePath,

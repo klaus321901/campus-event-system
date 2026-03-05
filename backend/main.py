@@ -60,6 +60,7 @@ if os.path.exists(frontend_dir):
 class EventUpdate(BaseModel):
     title: Optional[str] = None
     date: Optional[str] = None
+    time: Optional[str] = None
     venue: Optional[str] = None
     description: Optional[str] = None
     category: Optional[str] = None
@@ -103,6 +104,7 @@ def add_event_manually(event: EventCreate, db: Session = Depends(database.get_db
         profile_pic=None,
         is_published=True,   # Manually added events go live immediately
         source_type="manual",
+        time=event.event_time,
     )
     db.add(new_event)
     db.commit()
@@ -473,12 +475,19 @@ async def create_reminder(event_id: int, reminder_data: ReminderCreate, current_
     # Calculate reminder time based on event_date
     if not event.event_date:
         raise HTTPException(status_code=400, detail="Event date not yet verified for reminders")
-        
-    # PREVENT reminders for past events
-    now = datetime.now()
+
+    # Combine date + time safely
+    base_time = datetime.combine(event.event_date, datetime.min.time())
+    if event.time:
+        try:
+            h, m = map(int, event.time.split(':'))
+            base_time = base_time.replace(hour=h, minute=m)
+        except:
+            base_time = event.event_date # Fallback
+
     # PREVENT reminders for past events
     now_time = datetime.utcnow()
-    if event.event_date < now_time:
+    if base_time < now_time:
         raise HTTPException(status_code=400, detail="This event has already passed. Cannot set reminders.")
 
     delta = timedelta(hours=1) # default 1h

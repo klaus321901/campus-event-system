@@ -537,9 +537,7 @@
             document.getElementById('eventDisplay').innerHTML = `
                 <div class="event-main">
                     <!-- LEFT: Image -->
-                    <div class="image-container">
-                        <img src="${img}" class="event-image" onerror="this.src='https://via.placeholder.com/600x800?text=Event'">
-                    </div>
+                    ${(img && img !== '') ? `<div class="image-container"><img src="${img}" class="event-image" onerror="this.parentElement.style.display='none'"></div>` : ''}
 
                     <!-- RIGHT: Info Panel -->
                     <div class="info-panel">
@@ -583,7 +581,7 @@
                         </div>
 
                         <!-- Footer Action -->
-                        <a href="${event.source_url}" target="_blank" class="view-post-btn-big">View Post</a>
+                        ${event.source_url ? `<a href="${event.source_url}" target="_blank" class="view-post-btn-big">View Post</a>` : ''}
 
                     </div>
                 </div>
