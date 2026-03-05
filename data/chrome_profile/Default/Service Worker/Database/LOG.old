@@ -1,3 +1,9 @@
-2026/02/28-17:02:16.660 1f94 Reusing MANIFEST C:\Users\sanat\OneDrive\Desktop\campus_event_system\data\chrome_profile\Default\Service Worker\Database/MANIFEST-000001
-2026/02/28-17:02:16.696 1f94 Recovering log #15
-2026/02/28-17:02:16.699 1f94 Reusing old log C:\Users\sanat\OneDrive\Desktop\campus_event_system\data\chrome_profile\Default\Service Worker\Database/000015.log 
+2026/02/28-17:05:53.009 6f58 Reusing MANIFEST C:\Users\sanat\OneDrive\Desktop\campus_event_system\data\chrome_profile\Default\Service Worker\Database/MANIFEST-000001
+2026/02/28-17:05:53.011 6f58 Recovering log #15
+2026/02/28-17:05:53.015 6f58 Reusing old log C:\Users\sanat\OneDrive\Desktop\campus_event_system\data\chrome_profile\Default\Service Worker\Database/000015.log 
+2026/02/28-18:09:53.771 6a40 Compacting 1@0 + 1@1 files
+2026/02/28-18:09:53.784 6a40 Generated table #18@0: 659 keys, 5673 bytes
+2026/02/28-18:09:53.785 6a40 Compacted 1@0 + 1@1 files => 5673 bytes
+2026/02/28-18:09:53.790 6a40 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/02/28-18:09:53.792 6a40 Delete type=2 #13
+2026/02/28-18:09:53.793 6a40 Delete type=2 #16

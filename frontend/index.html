@@ -12,6 +12,10 @@
 
 <body>
     <div class="container" id="mainContainer">
+        <div id="toast-container"
+            style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; pointer-events: none;"></div>
+        <audio id="reminder-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"
+            preload="auto"></audio>
         <header>
             <h1>Campus Events 🚀</h1>
             <p>Your Portal to Everything Happening on Campus!</p>
@@ -670,6 +674,51 @@
             }
         };
 
+        async function checkReminders() {
+            if (!authToken) return;
+            try {
+                const res = await fetch('/users/me/reminders', {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const reminders = await res.json();
+
+                if (reminders && reminders.length > 0) {
+                    reminders.forEach(r => {
+                        showToast(`🔔 ${r.type} Before: ${r.event_title}`);
+                        document.getElementById('reminder-sound').play().catch(e => console.log("Sound blocked by browser"));
+                    });
+                }
+            } catch (e) { console.error("Reminder check failed", e); }
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(15px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                color: white;
+                padding: 15px 25px;
+                margin-top: 10px;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                transform: translateX(120%);
+                transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                pointer-events: all;
+                font-weight: 500;
+                max-width: 300px;
+            `;
+            toast.textContent = message;
+            container.appendChild(toast);
+
+            setTimeout(() => toast.style.transform = 'translateX(0)', 100);
+            setTimeout(() => {
+                toast.style.transform = 'translateX(120%)';
+                setTimeout(() => toast.remove(), 500);
+            }, 5000);
+        }
+
         // --- UTILS ---
         function toggleModal(id) {
             document.getElementById(id).classList.add('active');
@@ -697,6 +746,8 @@
         // Initialize
         checkAuth();
         loadEvents();
+        setInterval(checkReminders, 60000);
+        setTimeout(checkReminders, 2000);
     </script>
 </body>
 
