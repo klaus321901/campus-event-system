@@ -683,9 +683,11 @@
                 const reminders = await res.json();
 
                 if (reminders && reminders.length > 0) {
+                    // Play sound ONCE for the whole batch
+                    document.getElementById('reminder-sound').play().catch(e => console.log("Sound blocked by browser"));
+
                     reminders.forEach(r => {
                         showToast(`🔔 ${r.type} Before: ${r.event_title}`);
-                        document.getElementById('reminder-sound').play().catch(e => console.log("Sound blocked by browser"));
                     });
                 }
             } catch (e) { console.error("Reminder check failed", e); }
