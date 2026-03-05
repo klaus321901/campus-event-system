@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Connect | Event Details</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --accent: #00d2ff;
+            --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: white;
+            padding: 40px 20px;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 0 10px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 25px;
+            color: white;
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(-5px);
+        }
+
+        .action-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-action {
+            padding: 10px 22px;
+            border-radius: 25px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: inherit;
+        }
+
+        .btn-rate {
+            background: #f1c40f;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(241, 196, 15, 0.2);
+        }
+
+        .btn-remind {
+            background: #00d2ff;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0, 210, 255, 0.2);
+        }
+
+        .btn-action:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+
+        .event-detail-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(40px);
+            border-radius: 30px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+            display: flex;
+            width: 100%;
+        }
+
+        .event-main {
+            display: flex;
+            width: 100%;
+            align-items: stretch;
+            min-height: 580px;
+        }
+
+        .image-container {
+            flex: 1.1;
+            background: #000;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .event-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .info-panel {
+            flex: 0.9;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            background: #1d333e;
+            min-width: 0;
+            gap: 20px;
+        }
+
+        .club-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 5px;
+        }
+
+        .club-dp {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .club-info-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .club-name-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .club-name-text {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #fff;
+            line-height: 1;
+        }
+
+        .follow-btn {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .follow-btn:hover {
+            filter: brightness(1.1);
+        }
+
+        .event-category-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            background: rgba(0, 210, 255, 0.1);
+            color: var(--accent);
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .event-title {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 5px 0 0 0;
+            line-height: 1.2;
+        }
+
+        .rating-display {
+            color: #f1c40f;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-top: 5px;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            margin-top: 15px;
+        }
+
+        .box-title {
+            font-size: 0.72rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            opacity: 0.9;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: #eee;
+        }
+
+        .description-box {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            margin-top: 5px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .description-text {
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.6;
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .view-post-btn-big {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .view-post-btn-big:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center;
+            gap: 15px;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            color: #ccc;
+            cursor: pointer;
+        }
+
+        .star-rating input:checked~label,
+        .star-rating label:hover,
+        .star-rating label:hover~label {
+            color: #f1c40f;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .premium-modal-content {
+            background: rgba(15, 25, 35, 0.98);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            width: 480px;
+        }
+
+        .rem-grid-v2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .rem-btn-v2 {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: white;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .cancel-btn-v2 {
+            width: 100%;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            color: #ff5252;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+        }
+
+        @media (max-width: 900px) {
+            .event-detail-card {
+                flex-direction: column;
+            }
+
+            .image-container {
+                height: 400px;
+            }
+
+            .event-main {
+                flex-direction: column;
+                min-height: auto;
+            }
+
+            body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header-nav">
+            <a href="/" class="back-btn">← Back to Events</a>
+            <div class="action-group">
+                <button class="btn-action btn-rate" id="cardRateBtn">⭐ Rate Event</button>
+                <button class="btn-action btn-remind" id="cardRemindBtn">🔔 Set Reminder</button>
+            </div>
+        </div>
+
+        <div id="eventDisplay" class="event-detail-card">
+            <div class="loading" style="padding: 100px; text-align: center; width: 100%;">🚀 Loading Event Magic...
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="remModal" class="modal">
+        <div class="modal-content premium-modal-content"
+            style="background: rgba(15, 25, 35, 0.98); border: 1px solid rgba(255,255,255,0.1); width: 480px; padding: 40px;">
+            <div style="text-align: center; margin-bottom: 25px;">
+                <h2 style="font-size: 1.8rem; margin-bottom: 5px;">🔔 Set Reminder</h2>
+                <p style="opacity: 0.6; font-size: 0.95rem;">Choose when to be notified:</p>
+            </div>
+            <div class="rem-grid-v2"
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
+                <button class="rem-btn-v2" onclick="setReminder('30m')"
+                    style="padding: 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: white; border-radius: 12px; font-weight: 600; cursor: pointer;">30
+                    Min Before</button>
+                <button class="rem-btn-v2" onclick="setReminder('1h')"
+                    style="padding: 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: white; border-radius: 12px; font-weight: 600; cursor: pointer;">1
+                    Hour Before</button>
+                <button class="rem-btn-v2" onclick="setReminder('3h')"
+                    style="padding: 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: white; border-radius: 12px; font-weight: 600; cursor: pointer;">3
+                    Hours Before</button>
+                <button class="rem-btn-v2" onclick="setReminder('24h')"
+                    style="padding: 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: white; border-radius: 12px; font-weight: 600; cursor: pointer;">1
+                    Day Before</button>
+            </div>
+            <button class="cancel-btn-v2" onclick="closeModals()"
+                style="width: 100%; padding: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: #666; font-weight: 700; cursor: pointer; border: none;">Cancel</button>
+        </div>
+    </div>
+
+    <div id="rateModal" class="modal">
+        <div class="modal-content premium-modal-content" style="background: rgba(15, 25, 35, 0.98); width: 480px;">
+            <div style="text-align: center; margin-bottom: 25px;">
+                <h2 style="font-size: 1.8rem; margin-bottom: 5px;">⭐ Rate Event</h2>
+                <p style="opacity: 0.6; font-size: 0.95rem;">What's your score for this event?</p>
+            </div>
+            <form id="rateForm">
+                <div class="star-rating"
+                    style="display: flex; flex-direction: row-reverse; justify-content: center; gap: 15px; font-size: 2.5rem; margin-bottom: 30px;">
+                    <input type="radio" id="star5" name="rating" value="5"><label for="star5"
+                        style="cursor:pointer">★</label>
+                    <input type="radio" id="star4" name="rating" value="4"><label for="star4"
+                        style="cursor:pointer">★</label>
+                    <input type="radio" id="star3" name="rating" value="3"><label for="star3"
+                        style="cursor:pointer">★</label>
+                    <input type="radio" id="star2" name="rating" value="2"><label for="star2"
+                        style="cursor:pointer">★</label>
+                    <input type="radio" id="star1" name="rating" value="1"><label for="star1"
+                        style="cursor:pointer">★</label>
+                </div>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label style="display:block; margin-bottom: 8px; opacity: 0.6;">Comment (Optional)</label>
+                    <textarea id="rateComment" rows="4" placeholder="Enter your feedback here..."
+                        style="width:100%; background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding: 15px; color: white; font-family: inherit;"></textarea>
+                </div>
+                <button type="submit" class="submit-btn"
+                    style="width:100%; padding: 16px; background: var(--accent); color: black; border-radius: 12px; font-weight: 700; border: none; cursor: pointer;">Submit
+                    Review</button>
+                <button type="button" onclick="closeModals()"
+                    style="width:100%; margin-top: 15px; background: none; border: none; color: #ff5252; font-weight: 600; cursor: pointer;">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:8000";
+        const colors = ['#4A90E2', '#E24A90', '#90E24A', '#E2904A', '#4AE290', '#9B59B6', '#E74C3C', '#3498DB'];
+        let currentEventId = null;
+        let authToken = localStorage.getItem('access_token');
+
+        async function loadData() {
+            const id = new URLSearchParams(window.location.search).get('id');
+            currentEventId = id;
+            if (!id) return;
+
+            try {
+                const fetchUrl = `${window.location.origin}/events/${id}`;
+                console.log("Fetching event from:", fetchUrl);
+                const res = await fetch(fetchUrl);
+                if (!res.ok) {
+                    console.error("Fetch failed with status:", res.status);
+                    throw new Error("Event not found");
+                }
+                const event = await res.json();
+                render(event);
+            } catch (e) {
+                console.error(e);
+                document.getElementById('eventDisplay').innerHTML = `<div style="text-align:center; padding:100px; width:100%;"><h2>Event not found or server error ❌</h2><a href="/" style="color:var(--accent)">Return to Dashboard</a></div>`;
+            }
+        }
+
+        function render(event) {
+            const clubName = event.club_name || 'Club';
+            const initials = clubName.split('_').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+            const bgColor = colors[clubName.length % colors.length];
+
+            let img = event.image_path || '';
+            if (img.includes("data")) img = `/data${img.split("data")[1].replace(/\\/g, "/")}`;
+
+            function formatDate(dateStr) {
+                if (!dateStr) return 'TBA';
+                try {
+                    // Handle ISO strings or YYYY-MM-DD
+                    const date = new Date(dateStr);
+                    if (isNaN(date.getTime())) return dateStr;
+
+                    const options = { month: 'long', day: 'numeric', year: 'numeric' };
+                    return date.toLocaleDateString('en-US', options).split(',').join(' ');
+                } catch (e) { return dateStr; }
+            }
+
+            const eventDateObj = event.event_date ? new Date(event.event_date) : null;
+            const isPast = eventDateObj && eventDateObj < new Date();
+
+            // Check past event state immediately
+            setTimeout(() => {
+                if (isPast) {
+                    const remBtn = document.getElementById('cardRemindBtn');
+                    if (remBtn) {
+                        remBtn.innerHTML = "🏳️ Event Over";
+                        remBtn.style.opacity = "0.5";
+                        remBtn.disabled = true;
+                    }
+                }
+            }, 100);
+
+            console.log("Rendering event:", event); // Debug log
+
+            document.getElementById('eventDisplay').innerHTML = `
+                <div class="event-main">
+                    <!-- LEFT: Image -->
+                    <div class="image-container">
+                        <img src="${img}" class="event-image" onerror="this.src='https://via.placeholder.com/600x800?text=Event'">
+                    </div>
+
+                    <!-- RIGHT: Info Panel -->
+                    <div class="info-panel">
+                        
+                        <!-- Header: Club -->
+                        <div class="club-header">
+                            <div class="club-dp" style="background: ${bgColor};">${initials}</div>
+                            <div class="club-info-meta">
+                                <div class="club-name-row">
+                                    <div class="club-name-text">${clubName}</div>
+                                    <button id="followBtn" class="follow-btn">+ Follow Club</button>
+                                </div>
+                                <div class="event-category-tag">${event.category || 'General'}</div>
+                            </div>
+                        </div>
+
+                        <!-- Title & Rating -->
+                        <h1 class="event-title">${event.title || 'Untitled Event'}</h1>
+                        <div class="rating-display">
+                            ${event.review_count > 0
+                    ? `⭐ ${parseFloat(event.average_rating).toFixed(1)} (${event.review_count} reviews)`
+                    : 'No reviews yet'}
+                        </div>
+                        
+                        <!-- BOX 1: Event Information -->
+                        <div class="info-box">
+                            <div class="box-title">EVENT INFORMATION</div>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <div class="detail-item">📅 <b>Date:</b> ${formatDate(event.event_date || event.date_str)}</div>
+                                <div class="detail-item">📍 <b>Venue:</b> ${event.venue || 'MJCET Campus'}</div>
+                                ${event.time ? `<div class="detail-item">⏰ <b>Time:</b> ${event.time}</div>` : ''}
+                            </div>
+                        </div>
+
+                        <!-- BOX 2: Description -->
+                        <div class="description-box">
+                            <div class="box-title">DESCRIPTION</div>
+                            <div class="description-text">
+                                ${(event.description && event.description.trim() !== "") ? event.description : '<i style="opacity:0.5">No description available for this event.</i>'}
+                            </div>
+                        </div>
+
+                        <!-- Footer Action -->
+                        <a href="${event.source_url}" target="_blank" class="view-post-btn-big">View Post</a>
+
+                    </div>
+                </div>
+            `;
+
+            // Setup buttons after rendering
+            document.getElementById('cardRateBtn').onclick = () => {
+                if (!authToken) return alert("Please Login on the dashboard first to leave a review!");
+                document.getElementById('rateModal').classList.add('active');
+            };
+            document.getElementById('cardRemindBtn').onclick = (e) => {
+                e.preventDefault();
+                console.log("Reminder clicked. Past:", isPast, "Token:", !!authToken);
+                if (isPast) return;
+                if (!authToken) return alert("Please Login on the dashboard first to set reminders!");
+                document.getElementById('remModal').classList.add('active');
+            };
+
+            // Follow Club Button Logic
+            const followBtn = document.getElementById('followBtn');
+            if (followBtn) {
+                checkFollowing(event.club_name);
+                followBtn.onclick = async () => {
+                    if (!authToken) return alert("Please Login to follow clubs!");
+                    try {
+                        const res = await fetch(`${API_URL}/clubs/${encodeURIComponent(event.club_name)}/follow`, {
+                            method: 'POST',
+                            headers: { 'Authorization': `Bearer ${authToken}` }
+                        });
+                        const data = await res.json();
+                        updateFollowButton(data.following);
+                    } catch (e) { console.error(e); }
+                };
+            }
+        }
+
+        async function checkFollowing(clubName) {
+            if (!authToken) return;
+            try {
+                const res = await fetch(`${API_URL}/users/me/following`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const following = await res.json();
+                updateFollowButton(following.includes(clubName));
+            } catch (e) { console.error(e); }
+        }
+
+        function updateFollowButton(isFollowing) {
+            const btn = document.getElementById('followBtn');
+            if (!btn) return;
+            if (isFollowing) {
+                btn.innerHTML = "✅ Following";
+                btn.classList.add('active');
+            } else {
+                btn.innerHTML = "➕ Follow";
+                btn.classList.remove('active');
+            }
+        }
+
+        async function setReminder(type) {
+            if (!authToken) return alert("Please Login first!");
+            try {
+                const res = await fetch(`/events/${currentEventId}/remind`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({ reminder_type: type })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    alert("Reminder set! 🔔");
+                    closeModals();
+                } else {
+                    alert(data.detail || "Error setting reminder");
+                    closeModals();
+                }
+            } catch (e) { alert("Error setting reminder"); }
+        }
+
+        document.getElementById('rateForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const ratingInput = document.querySelector('input[name="rating"]:checked');
+            if (!ratingInput) return alert("Please select a star rating!");
+            const ratingValue = ratingInput.value;
+
+            try {
+                const res = await fetch(`${API_URL}/events/${currentEventId}/feedback`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({
+                        rating: parseInt(ratingValue),
+                        comment: document.getElementById('rateComment').value,
+                        user_name: "User"
+                    })
+                });
+                if (res.ok) {
+                    alert("Thanks for your review! ⭐");
+                    closeModals();
+                    loadData();
+                } else {
+                    const data = await res.json();
+                    alert(data.detail || "Error submitting review");
+                }
+            } catch (e) { alert("Error submitting review"); }
+        };
+
+        function closeModals() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); }
+        window.onclick = (e) => { if (e.target.className === 'modal active') closeModals(); }
+
+        loadData();
+    </script>
+</body>
+
+</html>

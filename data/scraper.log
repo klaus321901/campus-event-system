@@ -1,0 +1,301 @@
+
+==================================================
+LOGIN MODE: Please log in to Instagram in the browser window.
+Note: Your login will be SAVED to 'data/chrome_profile'.
+Once you are fully logged in and see your feed,
+press ENTER in this terminal to start scraping...
+==================================================
+
+  [STEALTH] Resting for 29.4s before next club...
+
+--- Scraping @csi_mjcet ---
+[DB] Connecting to: postgresql://postgres:3366@localhost:543...
+  [SKIP] Already in DB: MJCET Alumni Meet: Nostalgia 2K26
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by csi_mjcet. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/csi_mjcet/reel/DSuuWmnk-QV/
+  [AUDIO] Processing reel audio...
+[download]   0.2% of  520.21KiB at  274.35KiB/s ETA 00:01[download]   0.6% of  520.21KiB at  386.30KiB/s ETA 00:01[download]   1.3% of  520.21KiB at  770.67KiB/s ETA 00:00[download]   2.9% of  520.21KiB at    1.03MiB/s ETA 00:00[download]   6.0% of  520.21KiB at    2.14MiB/s ETA 00:00[download]  12.1% of  520.21KiB at    2.54MiB/s ETA 00:00[download]  24.4% of  520.21KiB at    2.66MiB/s ETA 00:00[download]  49.0% of  520.21KiB at    2.72MiB/s ETA 00:00[download]  98.2% of  520.21KiB at    2.27MiB/s ETA 00:00[download] 100.0% of  520.21KiB at    2.28MiB/s ETA 00:00[download] 100% of  520.21KiB in 00:00:00 at 1.77MiB/s                                                         [WHISPER] Model loaded ✅
+[WHISPER] Transcribing: csi_mjcet_2025-12-26T14-30-12_audio.mp3...
+[WHISPER] Done: 1 month. That's all we had to turn an idea into re...
+  [AI] Refining with Gemini Brain...
+[OCR] EasyOCR initialized ✅
+[OCR] Extracted 1 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by csi_mjcet. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/csi_mjcet/p/DSaO8TKkya5/
+  [AI] Refining with Gemini Brain...
+  [🛠️ REPAIR RUN] Found existing event with missing date: HackRevolution. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/csi_mjcet/reel/DSNhbGFkwpN/
+  [AUDIO] Processing reel audio...
+[download]   0.2% of  548.58KiB at  123.46KiB/s ETA 00:04[download]   0.5% of  548.58KiB at  214.06KiB/s ETA 00:02[download]   1.3% of  548.58KiB at  375.69KiB/s ETA 00:01[download]   2.7% of  548.58KiB at  701.26KiB/s ETA 00:00[download]   5.7% of  548.58KiB at    1.32MiB/s ETA 00:00[download]  11.5% of  548.58KiB at    1.58MiB/s ETA 00:00[download]  23.2% of  548.58KiB at    2.09MiB/s ETA 00:00[download]  46.5% of  548.58KiB at    2.14MiB/s ETA 00:00[download]  93.1% of  548.58KiB at    2.10MiB/s ETA 00:00[download] 100.0% of  548.58KiB at    2.13MiB/s ETA 00:00[download] 100% of  548.58KiB in 00:00:00 at 1.71MiB/s                                                         [WHISPER] Transcribing: csi_mjcet_2025-12-13T17-18-49_audio.mp3...
+[WHISPER] Done: We've been the 24 And when I'm back in Chicago, I ...
+  [AI] Refining with Gemini Brain...
+[GEMINI] ⚠️  Key #1 quota hit (attempt 1).
+[GEMINI] ✅ Using key #2 → gemini-2.5-flash
+[GEMINI] → Switched to key #2, retrying...
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by csi_mjcet. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/csi_mjcet/p/DR9-xeKk43w/
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 3 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: Anti-Gravity Unlocked. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/csi_mjcet/reel/DR2CH4Tk7m0/
+  [AUDIO] Processing reel audio...
+[download]   0.6% of  175.24KiB at  239.70KiB/s ETA 00:00[download]   1.7% of  175.24KiB at  414.80KiB/s ETA 00:00[download]   4.0% of  175.24KiB at  842.37KiB/s ETA 00:00[download]   8.6% of  175.24KiB at    1.03MiB/s ETA 00:00[download]  17.7% of  175.24KiB at    1.17MiB/s ETA 00:00[download]  35.9% of  175.24KiB at    1.81MiB/s ETA 00:00[download]  72.5% of  175.24KiB at    1.88MiB/s ETA 00:00[download] 100.0% of  175.24KiB at    1.75MiB/s ETA 00:00[download] 100% of  175.24KiB in 00:00:00 at 1.23MiB/s                                                         [WHISPER] Transcribing: csi_mjcet_2025-12-04T14-07-22_audio.mp3...
+[WHISPER] Done: 씩팅...
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 1 segments from poster
+  [STEALTH] Resting for 22.3s before next club...
+
+--- Scraping @ecellmjcet ---
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by ecellmjcet. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/ecellmjcet/reel/DVEuLH3kx57/
+  [AUDIO] Processing reel audio...
+[download]   0.6% of  165.66KiB at  221.92KiB/s ETA 00:00[download]   1.8% of  165.66KiB at  557.51KiB/s ETA 00:00[download]   4.2% of  165.66KiB at    1.07MiB/s ETA 00:00[download]   9.1% of  165.66KiB at  829.60KiB/s ETA 00:00[download]  18.7% of  165.66KiB at    1.36MiB/s ETA 00:00[download]  38.0% of  165.66KiB at    1.10MiB/s ETA 00:00[download]  76.7% of  165.66KiB at    1.39MiB/s ETA 00:00[download] 100.0% of  165.66KiB at    1.61MiB/s ETA 00:00[download] 100% of  165.66KiB in 00:00:00 at 1.01MiB/s                                                         [WHISPER] Transcribing: ecellmjcet_2026-02-22T21-19-36_audio.mp3...
+[WHISPER] Done: Go somewhere...
+  [AI] Refining with Gemini Brain...
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by ecellmjcet. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/ecellmjcet/p/DU5DL7ZEzac/
+  [QR] Found: https://docs.google.com/forms/d/e/1FAIpQLSedJVY9T55bL-9okbHMHC4OF2wz1Mz9q2Rbc3p9BNYdqtfOZA/viewform
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 39 segments from poster
+[GEMINI] ✅ Key #2 | E-Cell MJCET Core Team Recruitment | Date: 2024-02-24 | Deadline: None | Cat: Other
+  [SKIP] Skipping past event from 2024: https://www.instagram.com/ecellmjcet/p/DU5DL7ZEzac/
+  [🛠️ REPAIR RUN] Found existing event with missing date: TEDxMJCET. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/ecellmjcet/reel/DUyG9zbk_ac/
+  [AUDIO] Processing reel audio...
+[download]   0.4% of  272.64KiB at  600.22KiB/s ETA 00:00[download]   1.1% of  272.64KiB at  598.84KiB/s ETA 00:00[download]   2.6% of  272.64KiB at    1.13MiB/s ETA 00:00[download]   5.5% of  272.64KiB at    1.79MiB/s ETA 00:00[download]  11.4% of  272.64KiB at    2.44MiB/s ETA 00:00[download]  23.1% of  272.64KiB at    4.04MiB/s ETA 00:00[download]  46.6% of  272.64KiB at    6.11MiB/s ETA 00:00[download]  93.5% of  272.64KiB at    6.71MiB/s ETA 00:00[download] 100.0% of  272.64KiB at    6.58MiB/s ETA 00:00[download] 100% of  272.64KiB in 00:00:00 at 2.37MiB/s                                                         [WHISPER] Transcribing: ecellmjcet_2026-02-15T15-06-54_audio.mp3...
+[WHISPER] Done: I...
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 1 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by ecellmjcet. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/ecellmjcet/p/DSw84HsE-X4/
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 1 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: TEDxMJCET. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/ecellmjcet/reel/DShppTFkwUN/
+  [AUDIO] Processing reel audio...
+[download]   0.5% of  183.44KiB at  375.36KiB/s ETA 00:00[download]   1.6% of  183.44KiB at  403.89KiB/s ETA 00:00[download]   3.8% of  183.44KiB at  800.92KiB/s ETA 00:00[download]   8.2% of  183.44KiB at    1.36MiB/s ETA 00:00[download]  16.9% of  183.44KiB at    2.44MiB/s ETA 00:00[download]  34.3% of  183.44KiB at    4.96MiB/s ETA 00:00[download]  69.2% of  183.44KiB at    5.59MiB/s ETA 00:00[download] 100.0% of  183.44KiB at    1.54MiB/s ETA 00:00[download] 100% of  183.44KiB in 00:00:00 at 1.15MiB/s                                                         [WHISPER] Transcribing: ecellmjcet_2025-12-21T12-42-02_audio.mp3...
+[WHISPER] Done: 1캠 기회 예!...
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 2 segments from poster
+  [STEALTH] Resting for 21.1s before next club...
+
+--- Scraping @gdgc.mjcet ---
+  [🛠️ REPAIR RUN] Found existing event with missing date: Competition. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/gdgc.mjcet/reel/DVLG9oxkqv3/
+  [AUDIO] Processing reel audio...
+[download]   0.5% of  187.48KiB at  247.55KiB/s ETA 00:00[download]   1.6% of  187.48KiB at  539.65KiB/s ETA 00:00[download]   3.7% of  187.48KiB at    1.02MiB/s ETA 00:00[download]   8.0% of  187.48KiB at    1.87MiB/s ETA 00:00[download]  16.5% of  187.48KiB at    3.59MiB/s ETA 00:00[download]  33.6% of  187.48KiB at    6.18MiB/s ETA 00:00[download]  67.7% of  187.48KiB at    4.54MiB/s ETA 00:00[download] 100.0% of  187.48KiB at    4.90MiB/s ETA 00:00[download] 100% of  187.48KiB in 00:00:00 at 2.99MiB/s                                                         [WHISPER] Transcribing: gdgc.mjcet_2026-02-25T08-08-09_audio.mp3...
+[WHISPER] Done: Can't translate. Oh Now As Okay...
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 1 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: Competition. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/gdgc.mjcet/p/DVI5TH_kklq/
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 3 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: Competition. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/gdgc.mjcet/reel/DVGJvS3EkPu/
+  [AUDIO] Processing reel audio...
+[download]   0.4% of  276.92KiB at  Unknown B/s ETA Unknown[download]   1.1% of  276.92KiB at    1.10MiB/s ETA 00:00  [download]   2.5% of  276.92KiB at    2.56MiB/s ETA 00:00[download]   5.4% of  276.92KiB at    2.05MiB/s ETA 00:00[download]  11.2% of  276.92KiB at    3.66MiB/s ETA 00:00[download]  22.8% of  276.92KiB at    3.41MiB/s ETA 00:00[download]  45.9% of  276.92KiB at    4.73MiB/s ETA 00:00[download]  92.1% of  276.92KiB at    4.03MiB/s ETA 00:00[download] 100.0% of  276.92KiB at    4.37MiB/s ETA 00:00[download] 100% of  276.92KiB in 00:00:00 at 1.76MiB/s                                                         [WHISPER] Transcribing: gdgc.mjcet_2026-02-23T09-59-05_audio.mp3...
+[WHISPER] Done: Music The best thing for winners of egg based on o...
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 1 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: GDGC Hot Takes. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/gdgc.mjcet/reel/DUoI0j3khjl/
+  [AUDIO] Processing reel audio...
+[download]   0.4% of  254.02KiB at  267.34KiB/s ETA 00:01[download]   1.2% of  254.02KiB at  241.09KiB/s ETA 00:01[download]   2.8% of  254.02KiB at  422.17KiB/s ETA 00:00[download]   5.9% of  254.02KiB at  699.48KiB/s ETA 00:00[download]  12.2% of  254.02KiB at    1.27MiB/s ETA 00:00[download]  24.8% of  254.02KiB at    2.19MiB/s ETA 00:00[download]  50.0% of  254.02KiB at    3.38MiB/s ETA 00:00[download] 100.0% of  254.02KiB at    3.01MiB/s ETA 00:00[download] 100% of  254.02KiB in 00:00:00 at 1.87MiB/s                                                         [WHISPER] Transcribing: gdgc.mjcet_2026-02-11T18-13-29_audio.mp3...
+[WHISPER] Done: Google was the first baseline. We had learned skil...
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 1 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: Competition. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/gdgc.mjcet/p/DUljEbHkvfh/
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 15 segments from poster
+[GEMINI] ✅ Key #2 | Tech Face-Off | Date: None | Deadline: None | Cat: Technical
+  [🤝 SMART MERGE] Matching existing event: Tech Face-Off
+  [✅ MERGE/UPDATE] Success: Tech Face-Off
+  [JSON SAVE] Success
+  [SKIP] Already in DB: Tech Face-Off: The Verdict
+  [STEALTH] Resting for 19.5s before next club...
+
+--- Scraping @saemjcet ---
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by saemjcet. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/saemjcet/p/DOlP4CMD2Cg/
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 18 segments from poster
+[GEMINI] ⚠️  Key #2 quota hit (attempt 1).
+[GEMINI] ✅ Using key #3 → gemini-2.5-flash
+[GEMINI] → Switched to key #3, retrying...
+[GEMINI] ⚠️  Key #3 quota hit (attempt 2).
+[GEMINI] ✅ Using key #4 → gemini-2.5-flash
+[GEMINI] → Switched to key #4, retrying...
+  [🛠️ REPAIR RUN] Found existing event with missing date: Ignition. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/saemjcet/reel/DOjHkHgj8lf/
+  [AUDIO] Processing reel audio...
+[download]   0.2% of  430.22KiB at  129.85KiB/s ETA 00:03[download]   0.7% of  430.22KiB at  183.91KiB/s ETA 00:02[download]   1.6% of  430.22KiB at  360.80KiB/s ETA 00:01[download]   3.5% of  430.22KiB at  633.26KiB/s ETA 00:00[download]   7.2% of  430.22KiB at    1.11MiB/s ETA 00:00[download]  14.6% of  430.22KiB at    1.56MiB/s ETA 00:00[download]  29.5% of  430.22KiB at    2.37MiB/s ETA 00:00[download]  59.3% of  430.22KiB at    2.97MiB/s ETA 00:00[download] 100.0% of  430.22KiB at    2.95MiB/s ETA 00:00[download] 100% of  430.22KiB in 00:00:00 at 2.29MiB/s                                                         [WHISPER] Transcribing: saemjcet_2025-09-13T16-14-38_audio.mp3...
+[WHISPER] Done: tch , sell it delete it glad ? llyng sad movie...
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 2 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by saemjcet. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/saemjcet/p/DOlS_2DD7Gp/
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 21 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: Downforce. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/saemjcet/reel/DRhsfiNj_dB/
+  [AUDIO] Processing reel audio...
+[download]   0.7% of  142.60KiB at  130.22KiB/s ETA 00:01[download]   2.1% of  142.60KiB at  150.85KiB/s ETA 00:00[download]   4.9% of  142.60KiB at  208.71KiB/s ETA 00:00[download]  10.5% of  142.60KiB at  314.35KiB/s ETA 00:00[download]  21.7% of  142.60KiB at  554.06KiB/s ETA 00:00[download]  44.2% of  142.60KiB at  972.06KiB/s ETA 00:00[download]  89.1% of  142.60KiB at    1.51MiB/s ETA 00:00[download] 100.0% of  142.60KiB at    1.58MiB/s ETA 00:00[download] 100% of  142.60KiB in 00:00:00 at 934.23KiB/s                                                         [WHISPER] Transcribing: saemjcet_2025-11-26T16-34-21_audio.mp3...
+[WHISPER] Done: Out...D Independence Week We call it association M...
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 2 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: Ignition. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/saemjcet/reel/DRe7Vy6j_r9/
+  [AUDIO] Processing reel audio...
+[download]   0.5% of  211.56KiB at  Unknown B/s ETA Unknown[download]   1.4% of  211.56KiB at  760.99KiB/s ETA 00:00  [download]   3.3% of  211.56KiB at    1.32MiB/s ETA 00:00[download]   7.1% of  211.56KiB at    2.03MiB/s ETA 00:00[download]  14.7% of  211.56KiB at    2.40MiB/s ETA 00:00[download]  29.8% of  211.56KiB at    3.69MiB/s ETA 00:00[download]  60.0% of  211.56KiB at    3.49MiB/s ETA 00:00[download] 100.0% of  211.56KiB at    4.17MiB/s ETA 00:00[download] 100% of  211.56KiB in 00:00:00 at 1.47MiB/s                                                         [WHISPER] Transcribing: saemjcet_2025-11-25T14-48-17_audio.mp3...
+[WHISPER] Done: 1, 2, 3, 4, 8, 8, 8, I got a kind of women hatin' ...
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 2 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: Ignition. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/saemjcet/reel/DRTstPVCCBW/
+  [AUDIO] Processing reel audio...
+[download]   1.1% of   94.57KiB at   85.01KiB/s ETA 00:01[download]   3.2% of   94.57KiB at  198.03KiB/s ETA 00:00[download]   7.4% of   94.57KiB at  342.05KiB/s ETA 00:00[download]  15.9% of   94.57KiB at  621.83KiB/s ETA 00:00[download]  32.8% of   94.57KiB at    1.06MiB/s ETA 00:00[download]  66.6% of   94.57KiB at    1.47MiB/s ETA 00:00[download] 100.0% of   94.57KiB at    1.40MiB/s ETA 00:00[download] 100% of   94.57KiB in 00:00:00 at 757.46KiB/s                                                         [WHISPER] Transcribing: saemjcet_2025-11-21T06-05-30_audio.mp3...
+[WHISPER] Done: We didn't dream a thing Useful...
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 2 segments from poster
+  [STEALTH] Resting for 29.6s before next club...
+
+--- Scraping @club_optimus ---
+  [🛠️ REPAIR RUN] Found existing event with missing date: PCB 101. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/club_optimus/reel/DQOJRE7k2c3/
+  [AUDIO] Processing reel audio...
+[download]   0.4% of  251.30KiB at  150.16KiB/s ETA 00:01[download]   1.2% of  251.30KiB at  307.46KiB/s ETA 00:00[download]   2.8% of  251.30KiB at  502.76KiB/s ETA 00:00[download]   6.0% of  251.30KiB at  939.64KiB/s ETA 00:00[download]  12.3% of  251.30KiB at    1.90MiB/s ETA 00:00[download]  25.1% of  251.30KiB at    3.23MiB/s ETA 00:00[download]  50.5% of  251.30KiB at    4.53MiB/s ETA 00:00[download] 100.0% of  251.30KiB at    5.03MiB/s ETA 00:00[download] 100% of  251.30KiB in 00:00:00 at 2.81MiB/s                                                         [WHISPER] Transcribing: club_optimus_2025-10-25T05-56-58_audio.mp3...
+[WHISPER] Done: Maybe I liked his road of coast, uh, maybe it keep...
+  [AI] Refining with Gemini Brain...
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by club_optimus. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/club_optimus/p/DQJDRrRk3aQ/
+  [QR] Found: https://docs.google.com/forms/d/1EGzO_Ze2exZhdyiUkNuQTaSTWCWFzq9htnxkDLCH-28/edit?chromeless=1
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 15 segments from poster
+[GEMINI] ✅ Key #4 | PCB 101 | Date: 2025-10-25 | Deadline: None | Cat: Workshop
+  [SKIP] Skipping past event from 2025: https://www.instagram.com/club_optimus/p/DQJDRrRk3aQ/
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by club_optimus. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/club_optimus/p/DO82ZliE_Vp/
+  [QR] Found: https://forms.gle/F8Y7oEtiWMZ3pjNGA
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 22 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: TALAASH. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/club_optimus/reel/DMamarbzo25/
+  [AUDIO] Processing reel audio...
+[download]   0.2% of  467.31KiB at  Unknown B/s ETA Unknown[download]   0.6% of  467.31KiB at  740.21KiB/s ETA 00:00  [download]   1.5% of  467.31KiB at    1.12MiB/s ETA 00:00[download]   3.2% of  467.31KiB at  730.75KiB/s ETA 00:00[download]   6.6% of  467.31KiB at    1.34MiB/s ETA 00:00[download]  13.5% of  467.31KiB at  805.61KiB/s ETA 00:00[download]  27.2% of  467.31KiB at    1.36MiB/s ETA 00:00[download]  54.6% of  467.31KiB at    1.69MiB/s ETA 00:00[download] 100.0% of  467.31KiB at    1.99MiB/s ETA 00:00[download] 100% of  467.31KiB in 00:00:00 at 1.62MiB/s                                                         [WHISPER] Transcribing: club_optimus_2025-07-22T15-50-23_audio.mp3...
+[WHISPER] Done: .. great to doing What is it? get ready guys look ...
+  [AI] Refining with Gemini Brain...
+  [🛠️ REPAIR RUN] Found existing event with missing date: TALAASH: The Curse Beneath. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/club_optimus/reel/DLpTrfsTEp0/
+  [AUDIO] Processing reel audio...
+[download]   0.2% of  555.55KiB at  396.74KiB/s ETA 00:01[download]   0.5% of  555.55KiB at  484.98KiB/s ETA 00:01[download]   1.3% of  555.55KiB at  891.97KiB/s ETA 00:00[download]   2.7% of  555.55KiB at    1.26MiB/s ETA 00:00[download]   5.6% of  555.55KiB at    2.13MiB/s ETA 00:00[download]  11.3% of  555.55KiB at    3.74MiB/s ETA 00:00[download]  22.9% of  555.55KiB at    4.97MiB/s ETA 00:00[download]  45.9% of  555.55KiB at    5.00MiB/s ETA 00:00[download]  92.0% of  555.55KiB at    4.58MiB/s ETA 00:00[download] 100.0% of  555.55KiB at    4.60MiB/s ETA 00:00[download] 100% of  555.55KiB in 00:00:00 at 3.22MiB/s                                                         [WHISPER] Transcribing: club_optimus_2025-07-03T12-21-59_audio.mp3...
+[WHISPER] Done: Ready, skip. Greetings. This is Archivr Troof Depe...
+  [AI] Refining with Gemini Brain...
+  [🛠️ REPAIR RUN] Found existing event with missing date: TALAASH 2. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/club_optimus/reel/DLm0kRrzLPh/
+  [AUDIO] Processing reel audio...
+[download]   0.8% of  130.48KiB at  473.45KiB/s ETA 00:00[download]   2.3% of  130.48KiB at  955.20KiB/s ETA 00:00[download]   5.4% of  130.48KiB at    1.62MiB/s ETA 00:00[download]  11.5% of  130.48KiB at    1.54MiB/s ETA 00:00[download]  23.8% of  130.48KiB at    2.01MiB/s ETA 00:00[download]  48.3% of  130.48KiB at    2.34MiB/s ETA 00:00[download]  97.3% of  130.48KiB at    3.66MiB/s ETA 00:00[download] 100.0% of  130.48KiB at    3.66MiB/s ETA 00:00[download] 100% of  130.48KiB in 00:00:00 at 1.22MiB/s                                                         [WHISPER] Transcribing: club_optimus_2025-07-02T13-23-14_audio.mp3...
+[WHISPER] Done: ...
+  [AI] Refining with Gemini Brain...
+  [STEALTH] Resting for 24.1s before next club...
+
+--- Scraping @oratorsclubmjcet ---
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by oratorsclubmjcet. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/oratorsclubmjcet/reel/DRh9Qxfk8OX/
+  [AUDIO] Processing reel audio...
+[download]   0.9% of  116.05KiB at  660.73KiB/s ETA 00:00[download]   2.6% of  116.05KiB at    1.94MiB/s ETA 00:00[download]   6.0% of  116.05KiB at    2.12MiB/s ETA 00:00[download]  12.9% of  116.05KiB at    1.56MiB/s ETA 00:00[download]  26.7% of  116.05KiB at    2.06MiB/s ETA 00:00[download]  54.3% of  116.05KiB at    3.56MiB/s ETA 00:00[download] 100.0% of  116.05KiB at    3.00MiB/s ETA 00:00[download] 100% of  116.05KiB in 00:00:00 at 1.51MiB/s                                                         [WHISPER] Transcribing: oratorsclubmjcet_2025-11-26T19-05-08_audio.mp3...
+[WHISPER] Done: Music真的很 Re Chinatown...
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 5 segments from poster
+[GEMINI] ✅ Key #4 | Orators' Club Membership | Date: None | Deadline: None | Cat: Cultural
+  [✅ MERGE/UPDATE] Success: Event by oratorsclubmjcet
+  [JSON SAVE] Success
+  [🛠️ REPAIR RUN] Found existing event with missing date: SAFAR Podcast. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/oratorsclubmjcet/reel/DRUHUCHjEKC/
+  [AUDIO] Processing reel audio...
+[download]   0.1% of  928.75KiB at  654.54KiB/s ETA 00:01[download]   0.3% of  928.75KiB at    1.15MiB/s ETA 00:00[download]   0.8% of  928.75KiB at    1.69MiB/s ETA 00:00[download]   1.6% of  928.75KiB at    2.31MiB/s ETA 00:00[download]   3.3% of  928.75KiB at    2.36MiB/s ETA 00:00[download]   6.8% of  928.75KiB at    3.31MiB/s ETA 00:00[download]  13.7% of  928.75KiB at    3.26MiB/s ETA 00:00[download]  27.5% of  928.75KiB at    4.29MiB/s ETA 00:00[download]  55.0% of  928.75KiB at    3.48MiB/s ETA 00:00[download] 100.0% of  928.75KiB at    3.38MiB/s ETA 00:00[download] 100% of  928.75KiB in 00:00:00 at 2.77MiB/s                                                         [WHISPER] Transcribing: oratorsclubmjcet_2025-11-21T09-58-21_audio.mp3...
+[WHISPER] Done: dhash bg Ambaan i usi ndwai sleke vya gha baad haz...
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 5 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: SAFAR Podcast. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/oratorsclubmjcet/reel/DRJYiY7k9Fu/
+  [AUDIO] Processing reel audio...
+[download]   0.1% of    1.02MiB at  147.07KiB/s ETA 00:07[download]   0.3% of    1.02MiB at  410.52KiB/s ETA 00:02[download]   0.7% of    1.02MiB at  779.51KiB/s ETA 00:01[download]   1.4% of    1.02MiB at    1.37MiB/s ETA 00:00[download]   3.0% of    1.02MiB at    2.26MiB/s ETA 00:00[download]   6.0% of    1.02MiB at    1.92MiB/s ETA 00:00[download]  12.1% of    1.02MiB at    1.94MiB/s ETA 00:00[download]  24.3% of    1.02MiB at    2.17MiB/s ETA 00:00[download]  48.8% of    1.02MiB at    2.62MiB/s ETA 00:00[download]  97.7% of    1.02MiB at    3.20MiB/s ETA 00:00[download] 100.0% of    1.02MiB at    3.22MiB/s ETA 00:00[download] 100% of    1.02MiB in 00:00:00 at 2.81MiB/s                                                         [WHISPER] Transcribing: oratorsclubmjcet_2025-11-17T05-59-46_audio.mp3...
+[WHISPER] Done: mutual Então bah ARM chose We have companies comin...
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 5 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: SAFAR Podcast. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/oratorsclubmjcet/reel/DRFMpewkzuJ/
+  [AUDIO] Processing reel audio...
+[download]   0.4% of  222.51KiB at  663.87KiB/s ETA 00:00[download]   1.3% of  222.51KiB at  813.06KiB/s ETA 00:00[download]   3.1% of  222.51KiB at    1.85MiB/s ETA 00:00[download]   6.7% of  222.51KiB at    1.78MiB/s ETA 00:00[download]  13.9% of  222.51KiB at    3.10MiB/s ETA 00:00[download]  28.3% of  222.51KiB at    1.73MiB/s ETA 00:00[download]  57.1% of  222.51KiB at    2.07MiB/s ETA 00:00[download] 100.0% of  222.51KiB at    1.96MiB/s ETA 00:00[download] 100% of  222.51KiB in 00:00:00 at 1.26MiB/s                                                         [WHISPER] Transcribing: oratorsclubmjcet_2025-11-15T14-59-21_audio.mp3...
+[WHISPER] Done: Hey, I just made it. Yeah, this is crazy, but here...
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 5 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: SAFAR Podcast. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/oratorsclubmjcet/reel/DRAQPy-jPWJ/
+  [AUDIO] Processing reel audio...
+[download]   0.3% of  327.01KiB at  Unknown B/s ETA Unknown[download]   0.9% of  327.01KiB at  436.79KiB/s ETA 00:00  [download]   2.1% of  327.01KiB at  885.35KiB/s ETA 00:00[download]   4.6% of  327.01KiB at    1.62MiB/s ETA 00:00[download]   9.5% of  327.01KiB at    1.76MiB/s ETA 00:00[download]  19.3% of  327.01KiB at    1.83MiB/s ETA 00:00[download]  38.8% of  327.01KiB at    2.13MiB/s ETA 00:00[download]  78.0% of  327.01KiB at    2.55MiB/s ETA 00:00[download] 100.0% of  327.01KiB at  490.21KiB/s ETA 00:00[download] 100% of  327.01KiB in 00:00:00 at 452.34KiB/s                                                         [WHISPER] Transcribing: oratorsclubmjcet_2025-11-13T16-55-34_audio.mp3...
+[WHISPER] Done: And we were like oh this will be fun like students...
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 5 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: SAFAR Podcast. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/oratorsclubmjcet/reel/DL7ueKazLk7/
+  [AUDIO] Processing reel audio...
+[download]   0.4% of  235.51KiB at  661.88KiB/s ETA 00:00[download]   1.3% of  235.51KiB at    1.16MiB/s ETA 00:00[download]   3.0% of  235.51KiB at    1.94MiB/s ETA 00:00[download]   6.4% of  235.51KiB at    1.87MiB/s ETA 00:00[download]  13.2% of  235.51KiB at    1.68MiB/s ETA 00:00[download]  26.8% of  235.51KiB at    2.99MiB/s ETA 00:00[download]  53.9% of  235.51KiB at    3.37MiB/s ETA 00:00[download] 100.0% of  235.51KiB at    4.70MiB/s ETA 00:00[download] 100% of  235.51KiB in 00:00:00 at 2.08MiB/s                                                         [WHISPER] Transcribing: oratorsclubmjcet_2025-07-10T16-04-36_audio.mp3...
+[WHISPER] Done: U ok...
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 5 segments from poster
+  [STEALTH] Resting for 22.4s before next club...
+
+--- Scraping @mssmjcet ---
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by mssmjcet. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/mssmjcet/p/DVBKslLER5U/
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 12 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by mssmjcet. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/mssmjcet/p/DVBKaUKEeFi/
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 11 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by mssmjcet. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/mssmjcet/p/DVBKE5XEZRP/
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 13 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by mssmjcet. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/mssmjcet/p/DVBJoWdETDI/
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 12 segments from poster
+[GEMINI] ⚠️  Key #4 quota hit (attempt 1).
+[GEMINI] ✅ Using key #5 → gemini-2.5-flash
+[GEMINI] → Switched to key #5, retrying...
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by mssmjcet. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/mssmjcet/reel/DVBIrkziOF4/
+  [AUDIO] Processing reel audio...
+[download]   0.2% of  639.50KiB at  982.50KiB/s ETA 00:00[download]   0.5% of  639.50KiB at  791.78KiB/s ETA 00:00[download]   1.1% of  639.50KiB at    1.42MiB/s ETA 00:00[download]   2.3% of  639.50KiB at 1003.60KiB/s ETA 00:00[download]   4.8% of  639.50KiB at    1.89MiB/s ETA 00:00[download]   9.9% of  639.50KiB at    2.49MiB/s ETA 00:00[download]  19.9% of  639.50KiB at    2.84MiB/s ETA 00:00[download]  39.9% of  639.50KiB at    2.39MiB/s ETA 00:00[download]  79.9% of  639.50KiB at    3.33MiB/s ETA 00:00[download] 100.0% of  639.50KiB at    3.41MiB/s ETA 00:00[download] 100% of  639.50KiB in 00:00:00 at 2.66MiB/s                                                         [WHISPER] Transcribing: mssmjcet_2026-02-21T11-10-55_audio.mp3...
+[WHISPER] Done: he...
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 1 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by mssmjcet. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/mssmjcet/p/DVBDZrckRYG/
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 8 segments from poster
+  [STEALTH] Resting for 19.0s before next club...
+
+--- Scraping @horizon.mjcet ---
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by horizon.mjcet. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/horizon.mjcet/p/DSMfN43kjYZ/
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 14 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: Fusion X: Workshop on Blockchain and AI. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/horizon.mjcet/p/DSMYR0fkkLc/
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 1 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: Fusion X. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/horizon.mjcet/reel/DRe9G5ekulG/
+  [AUDIO] Processing reel audio...
+[download]   0.5% of  202.47KiB at  332.85KiB/s ETA 00:00[download]   1.5% of  202.47KiB at  255.41KiB/s ETA 00:00[download]   3.5% of  202.47KiB at  480.85KiB/s ETA 00:00[download]   7.4% of  202.47KiB at  933.53KiB/s ETA 00:00[download]  15.3% of  202.47KiB at    1.58MiB/s ETA 00:00[download]  31.1% of  202.47KiB at    2.69MiB/s ETA 00:00[download]  62.7% of  202.47KiB at    3.14MiB/s ETA 00:00[download] 100.0% of  202.47KiB at    3.63MiB/s ETA 00:00[download] 100% of  202.47KiB in 00:00:00 at 1.81MiB/s                                                         [WHISPER] Transcribing: horizon.mjcet_2025-11-25T15-00-56_audio.mp3...
+[WHISPER] Done: dough Nanami um e...
+  [AI] Refining with Gemini Brain...
+[OCR] Extracted 1 segments from poster
+  [🛠️ REPAIR RUN] Found existing event with missing date: Event by horizon.mjcet. Re-scanning...
+  [NEW] Found new post: https://www.instagram.com/horizon.mjcet/reel/DQ_0N3uEiCr/
