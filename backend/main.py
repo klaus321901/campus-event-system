@@ -209,7 +209,7 @@ def get_staging_events(db: Session = Depends(database.get_db)):
 
     query_results = db.query(models.Event, subquery.c.avg_rating, subquery.c.review_count).outerjoin(
         subquery, models.Event.id == subquery.c.event_id
-    ).order_by(models.Event.created_at.desc()).all()
+    ).filter(models.Event.source_type == "manual").order_by(models.Event.created_at.desc()).all()
 
     results = []
     for event_obj, avg_rating, review_count in query_results:
@@ -243,7 +243,10 @@ def unpublish_event(event_id: int, db: Session = Depends(database.get_db)):
 @app.post("/admin/publish-all/")
 def publish_all_events(db: Session = Depends(database.get_db)):
     """Admin: publish ALL staging events. Promotes them all to 'manual'."""
-    count = db.query(models.Event).filter(models.Event.is_published == False).update({
+    count = db.query(models.Event).filter(
+        models.Event.is_published == False,
+        models.Event.source_type == "manual"
+    ).update({
         "is_published": True,
         "source_type": "manual"
     })

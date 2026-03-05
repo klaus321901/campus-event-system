@@ -566,6 +566,7 @@ def scrape_instagram():
                             "title": title or f"Event by {username}",
                             "description": caption,
                             "club_name": username,
+                            "source_type": "instagram",
                             "profile_pic": profile_pic_url,
                             "source_url": post_url,
                             "image_path": img_path,
