@@ -106,6 +106,9 @@ class EventCreate(BaseModel):
 @app.post("/events/add")
 def add_event_manually(event: EventCreate, db: Session = Depends(database.get_db)):
     """Admin: manually add a new event directly to PostgreSQL."""
+    # Normalize source_url: Empty string or whitespace becomes None (NULL in DB)
+    event_source_url = event.source_url.strip() if event.source_url and event.source_url.strip() else None
+
     actual_date = None
     if event.event_date:
         try:
@@ -116,8 +119,8 @@ def add_event_manually(event: EventCreate, db: Session = Depends(database.get_db
     normalized_time = normalize_time(event.event_time)
 
     # Issue 1: source_url override logic
-    if event.source_url:
-        existing = db.query(models.Event).filter(models.Event.source_url == event.source_url).first()
+    if event_source_url:
+        existing = db.query(models.Event).filter(models.Event.source_url == event_source_url).first()
         if existing:
             # Update existing event (likely from instagram scraper)
             existing.title = event.title
@@ -130,8 +133,6 @@ def add_event_manually(event: EventCreate, db: Session = Depends(database.get_db
             existing.registration_link = event.registration_link or existing.registration_link
             existing.image_path = event.image_path or existing.image_path
             existing.time = normalized_time
-            # is_published and source_type will be moved below if we decide it's a "promote to manual"
-            # As per requirement: "source_type should become 'manual' and is_published should become True"
             existing.source_type = "manual"
             existing.is_published = True
             db.commit()
@@ -147,13 +148,14 @@ def add_event_manually(event: EventCreate, db: Session = Depends(database.get_db
         venue=event.venue or "MJCET Campus",
         category=event.category or "Other",
         registration_link=event.registration_link,
-        source_url=event.source_url,
+        source_url=event_source_url,
         image_path=event.image_path,
         profile_pic=None,
         is_published=True,   # Manually added events go live immediately
         source_type="manual",
         time=normalized_time,
     )
+
     db.add(new_event)
     db.commit()
     db.refresh(new_event)
@@ -310,6 +312,10 @@ def update_event(event_id: int, event_update: EventUpdate, db: Session = Depends
     if not db_event:
         raise HTTPException(status_code=404, detail="Event not found")
     
+    # Normalize source_url: Empty string or whitespace becomes None (NULL in DB)
+    if event_update.source_url is not None:
+        event_update.source_url = event_update.source_url.strip() if event_update.source_url.strip() else None
+
     # Check if another event exists with the same source_url
     if event_update.source_url:
         existing = db.query(models.Event).filter(
@@ -321,6 +327,7 @@ def update_event(event_id: int, event_update: EventUpdate, db: Session = Depends
                 status_code=400,
                 detail="An event with this source URL already exists."
             )
+
 
     update_data = event_update.dict(exclude_unset=True)
     
