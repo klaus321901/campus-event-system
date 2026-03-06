@@ -421,6 +421,11 @@ header p {
     color: #fff;
 }
 
+.event-card.no-image .event-title-main {
+    text-align: center;
+    padding-top: 10px;
+}
+
 .event-info-row {
     display: flex;
     flex-direction: column;

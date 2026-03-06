@@ -371,6 +371,25 @@
             border: none;
         }
 
+        /* Layout for No-Image state */
+        .event-main.no-image {
+            justify-content: center;
+            min-height: auto;
+        }
+
+        .event-main.no-image .info-panel {
+            flex: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .event-main.no-image .event-title,
+        .event-main.no-image .rating-display,
+        .event-main.no-image .club-header {
+            justify-content: center;
+            text-align: center;
+        }
+
         @media (max-width: 900px) {
             .event-detail-card {
                 flex-direction: column;
@@ -534,10 +553,11 @@
 
             console.log("Rendering event:", event); // Debug log
 
+            const hasImage = img && img.trim() !== '';
             document.getElementById('eventDisplay').innerHTML = `
-                <div class="event-main">
+                <div class="event-main ${!hasImage ? 'no-image' : ''}">
                     <!-- LEFT: Image -->
-                    ${(img && img !== '') ? `<div class="image-container"><img src="${img}" class="event-image" onerror="this.parentElement.style.display='none'"></div>` : ''}
+                    ${hasImage ? `<div class="image-container"><img src="${img}" class="event-image" onerror="this.remove()"></div>` : ''}
 
                     <!-- RIGHT: Info Panel -->
                     <div class="info-panel">

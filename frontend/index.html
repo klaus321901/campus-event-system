@@ -432,8 +432,10 @@
                 let img = event.image_path || '';
                 if (img && img.includes("data")) img = `/data${img.split("data")[1].replace(/\\/g, "/")}`;
 
+
+                const hasImage = img && img.trim() !== '';
                 const card = document.createElement('div');
-                card.className = 'event-card';
+                card.className = `event-card ${!hasImage ? 'no-image' : ''}`;
 
                 const ratingValue = event.average_rating > 0 ? parseFloat(event.average_rating).toFixed(1) : '—';
                 const reviewsText = event.review_count > 0 ? `⭐ ${ratingValue} (${event.review_count} reviews)` : 'No reviews yet';
@@ -450,7 +452,7 @@
                         </div>
                         <button class="mini-action-btn rate" onclick="handleRateClick(event, ${event.id})">⭐ Rate</button>
                     </div>
-                    ${(img && img !== '') ? `<div class="card-image-wrap"><img src="${img}" alt="${event.title}" onerror="this.style.display='none'"></div>` : ''}
+                    ${hasImage ? `<div class="card-image-wrap"><img src="${img}" alt="${event.title}" onerror="this.remove()"></div>` : ''}
                     <div class="card-content">
                         <div class="rating-line">${reviewsText}</div>
                         <h3 class="event-title-main">${event.title || 'Event by ' + clubName}</h3>
