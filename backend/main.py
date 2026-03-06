@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from sqlalchemy import func
+from sqlalchemy.exc import IntegrityError
 from datetime import datetime, timedelta
 from typing import List, Optional
 from pydantic import BaseModel
@@ -24,6 +25,24 @@ try:
 except ImportError:
     print("[WARNING] Could not import gemini_refiner. 'Refine' functionality will be limited.")
     refine_event_with_gemini = None
+
+def normalize_time(time_str: Optional[str]) -> Optional[str]:
+    """Normalize mixed time formats (12h/24h) to HH:MM (24h)."""
+    if not time_str:
+        return None
+    time_str = time_str.strip().upper()
+    formats = [
+        "%I:%M %p", "%I:%M%p", "%I %p", "%I%p", # 12-hour
+        "%H:%M", "%H.%M", "%H %M",              # 24-hour
+    ]
+    for fmt in formats:
+        try:
+            dt = datetime.strptime(time_str, fmt)
+            return dt.strftime("%H:%M")
+        except ValueError:
+            continue
+    return time_str
+
 
 models.Base.metadata.create_all(bind=database.engine)
 
@@ -59,14 +78,17 @@ if os.path.exists(frontend_dir):
 
 class EventUpdate(BaseModel):
     title: Optional[str] = None
-    date: Optional[str] = None
+    club_name: Optional[str] = None
+    category: Optional[str] = None
+    event_date: Optional[str] = None
     time: Optional[str] = None
     venue: Optional[str] = None
-    description: Optional[str] = None
-    category: Optional[str] = None
-    registration_link: Optional[str] = None
-    last_register_date: Optional[str] = None
     source_url: Optional[str] = None
+    registration_link: Optional[str] = None
+    description: Optional[str] = None
+    image_path: Optional[str] = None
+    last_register_date: Optional[str] = None
+    is_published: Optional[bool] = None
 
 class EventCreate(BaseModel):
     title: str
@@ -90,6 +112,32 @@ def add_event_manually(event: EventCreate, db: Session = Depends(database.get_db
             actual_date = datetime.strptime(event.event_date, "%Y-%m-%d")
         except ValueError:
             pass
+            
+    normalized_time = normalize_time(event.event_time)
+
+    # Issue 1: source_url override logic
+    if event.source_url:
+        existing = db.query(models.Event).filter(models.Event.source_url == event.source_url).first()
+        if existing:
+            # Update existing event (likely from instagram scraper)
+            existing.title = event.title
+            existing.club_name = event.club_name
+            existing.description = event.description or existing.description
+            existing.event_date = actual_date
+            existing.date_str = event.event_date
+            existing.venue = event.venue or existing.venue
+            existing.category = event.category or existing.category
+            existing.registration_link = event.registration_link or existing.registration_link
+            existing.image_path = event.image_path or existing.image_path
+            existing.time = normalized_time
+            # is_published and source_type will be moved below if we decide it's a "promote to manual"
+            # As per requirement: "source_type should become 'manual' and is_published should become True"
+            existing.source_type = "manual"
+            existing.is_published = True
+            db.commit()
+            db.refresh(existing)
+            return {"message": "Existing event updated and published", "id": existing.id}
+
     new_event = models.Event(
         title=event.title,
         club_name=event.club_name,
@@ -104,12 +152,13 @@ def add_event_manually(event: EventCreate, db: Session = Depends(database.get_db
         profile_pic=None,
         is_published=True,   # Manually added events go live immediately
         source_type="manual",
-        time=event.event_time,
+        time=normalized_time,
     )
     db.add(new_event)
     db.commit()
     db.refresh(new_event)
     return {"message": "Event added successfully", "id": new_event.id}
+
 
 @app.post("/upload-image")
 async def upload_image(file: UploadFile = File(...)):
@@ -261,14 +310,53 @@ def update_event(event_id: int, event_update: EventUpdate, db: Session = Depends
     if not db_event:
         raise HTTPException(status_code=404, detail="Event not found")
     
-    # Allow updating fields even if they're None (to clear them)
+    # Check if another event exists with the same source_url
+    if event_update.source_url:
+        existing = db.query(models.Event).filter(
+            models.Event.source_url == event_update.source_url,
+            models.Event.id != event_id
+        ).first()
+        if existing:
+            raise HTTPException(
+                status_code=400,
+                detail="An event with this source URL already exists."
+            )
+
     update_data = event_update.dict(exclude_unset=True)
+    
+    # Handle event_date specially to update both date_str and event_date
+    if "event_date" in update_data:
+        d_str = update_data.pop("event_date")
+        db_event.date_str = d_str
+        try:
+            db_event.event_date = datetime.strptime(d_str, "%Y-%m-%d")
+        except:
+            # If invalid format, let event_date be null or keep old
+            pass
+
+    # Normalize time if provided
+    if "time" in update_data:
+        update_data["time"] = normalize_time(update_data["time"])
+
     for field, value in update_data.items():
-        setattr(db_event, field, value)
+        if hasattr(db_event, field):
+            setattr(db_event, field, value)
         
-    db.commit()
-    db.refresh(db_event)
+    try:
+        db.commit()
+        db.refresh(db_event)
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=400,
+            detail="An event with this source URL already exists."
+        )
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+        
     return db_event
+
 
 @app.delete("/events/{event_id}")
 def delete_event(event_id: int, db: Session = Depends(database.get_db)):
@@ -472,22 +560,23 @@ async def create_reminder(event_id: int, reminder_data: ReminderCreate, current_
     if not event:
         raise HTTPException(status_code=404, detail="Event not found")
     
-    # Calculate reminder time based on event_date
-    if not event.event_date:
-        raise HTTPException(status_code=400, detail="Event date not yet verified for reminders")
+    # Issue 4: Reminder validation
+    if not event.event_date or not event.time:
+        raise HTTPException(status_code=400, detail="Reminders require both event date and time.")
 
-    # Combine date + time safely
-    base_time = datetime.combine(event.event_date, datetime.min.time())
-    if event.time:
-        try:
+    # Calculate reminder time based on event_date + time
+    try:
+        event_start = datetime.combine(event.event_date, datetime.min.time())
+        if event.time:
+            # Time is stored as HH:MM
             h, m = map(int, event.time.split(':'))
-            base_time = base_time.replace(hour=h, minute=m)
-        except:
-            base_time = event.event_date # Fallback
+            event_start = event_start.replace(hour=h, minute=m)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Invalid event time format: {event.time}")
 
     # PREVENT reminders for past events
     now_time = datetime.utcnow()
-    if base_time < now_time:
+    if event_start < now_time:
         raise HTTPException(status_code=400, detail="This event has already passed. Cannot set reminders.")
 
     delta = timedelta(hours=1) # default 1h
@@ -498,7 +587,8 @@ async def create_reminder(event_id: int, reminder_data: ReminderCreate, current_
     elif reminder_data.reminder_type == "24h":
         delta = timedelta(days=1)
         
-    target_time = event.event_date - delta
+    # Issue 3: Reminder calculation bug
+    target_time = event_start - delta
     
     # Also check if the TARGET logic time is already in the past
     if target_time < now_time:
@@ -513,6 +603,7 @@ async def create_reminder(event_id: int, reminder_data: ReminderCreate, current_
     db.add(new_reminder)
     db.commit()
     return {"message": f"Reminder set for {reminder_data.reminder_type} before the event!"}
+
 
 @app.get("/users/me/reminders")
 async def get_my_reminders(current_user: models.User = Depends(get_current_user), db: Session = Depends(database.get_db)):

@@ -525,31 +525,51 @@
             if (img.includes("data")) img = `/data${img.split("data")[1].replace(/\\/g, "/")}`;
 
             function formatDate(dateStr) {
-                if (!dateStr) return 'TBA';
+                if (!dateStr || dateStr === 'TBA') return 'TBA';
                 try {
-                    // Handle ISO strings or YYYY-MM-DD
                     const date = new Date(dateStr);
                     if (isNaN(date.getTime())) return dateStr;
-
-                    const options = { month: 'long', day: 'numeric', year: 'numeric' };
-                    return date.toLocaleDateString('en-US', options).split(',').join(' ');
+                    return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
                 } catch (e) { return dateStr; }
             }
 
-            const eventDateObj = event.event_date ? new Date(event.event_date) : null;
-            const isPast = eventDateObj && eventDateObj < new Date();
+            function formatTime(timeStr) {
+                if (!timeStr || timeStr === 'TBA') return null;
+                try {
+                    const [hours, minutes] = timeStr.split(':');
+                    const date = new Date();
+                    date.setHours(parseInt(hours), parseInt(minutes));
+                    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+                } catch (e) { return timeStr; }
+            }
+
+
+            // Issue 5: Accurate Event ended detection
+            const eventStart = event.event_date ? new Date(event.event_date) : null;
+            if (eventStart && event.time) {
+                const [h, m] = event.time.split(':');
+                eventStart.setHours(parseInt(h), parseInt(m));
+            }
+            const isPast = eventStart && eventStart < new Date();
 
             // Check past event state immediately
             setTimeout(() => {
-                if (isPast) {
-                    const remBtn = document.getElementById('cardRemindBtn');
-                    if (remBtn) {
-                        remBtn.innerHTML = "🏳️ Event Over";
+                const remBtn = document.getElementById('cardRemindBtn');
+                if (remBtn) {
+                    if (isPast) {
+                        remBtn.innerHTML = "🏳️ Event Ended";
                         remBtn.style.opacity = "0.5";
+                        remBtn.disabled = true;
+                    } else if (!event.event_date || !event.time) {
+                        // Issue 4 & 9: Disable reminders if date or time is missing
+                        remBtn.innerHTML = "🔔 Reminders Disabled";
+                        remBtn.style.opacity = "0.5";
+                        remBtn.title = "Date and time required for reminders";
                         remBtn.disabled = true;
                     }
                 }
             }, 100);
+
 
             console.log("Rendering event:", event); // Debug log
 
@@ -588,9 +608,10 @@
                             <div style="display: flex; flex-direction: column; gap: 8px;">
                                 <div class="detail-item">📅 <b>Date:</b> ${formatDate(event.event_date || event.date_str)}</div>
                                 <div class="detail-item">📍 <b>Venue:</b> ${event.venue || 'MJCET Campus'}</div>
-                                ${event.time ? `<div class="detail-item">⏰ <b>Time:</b> ${event.time}</div>` : ''}
+                                ${event.time ? `<div class="detail-item">⏰ <b>Time:</b> ${formatTime(event.time)}</div>` : ''}
                             </div>
                         </div>
+
 
                         <!-- BOX 2: Description -->
                         <div class="description-box">

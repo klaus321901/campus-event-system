@@ -389,13 +389,24 @@
         }
 
         function formatDate(dateStr) {
-            if (!dateStr || dateStr === 'TBA') return 'Date TBA';
+            if (!dateStr || dateStr === 'TBA') return 'TBA';
             try {
                 const date = new Date(dateStr);
                 if (isNaN(date.getTime())) return dateStr;
                 return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
             } catch (e) { return dateStr; }
         }
+
+        function formatTime(timeStr) {
+            if (!timeStr || timeStr === 'TBA') return '';
+            try {
+                const [hours, minutes] = timeStr.split(':');
+                const date = new Date();
+                date.setHours(parseInt(hours), parseInt(minutes));
+                return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+            } catch (e) { return timeStr; }
+        }
+
 
         function renderEvents(events) {
             const grid = document.getElementById('eventsGrid');
@@ -413,11 +424,20 @@
                 const matchesCategory = category === 'all' || (e.category || "").toLowerCase() === category.toLowerCase();
                 const matchesClub = selectedClub === 'all' || e.club_name === selectedClub;
 
-                const eventDate = e.event_date ? new Date(e.event_date) : null;
-                const isConcluded = eventDate && eventDate < now;
+                // Issue 5: Accurate Event ended detection
+                let isConcluded = false;
+                if (e.event_date) {
+                    const eventDate = new Date(e.event_date);
+                    if (e.time) {
+                        const [h, m] = e.time.split(':');
+                        eventDate.setHours(parseInt(h), parseInt(m));
+                    }
+                    isConcluded = eventDate < now;
+                }
 
                 return matchesSearch && matchesCategory && matchesClub && !isConcluded;
             });
+
 
             if (filtered.length === 0) {
                 grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 100px;"><h2>🔍 No events found</h2></div>';
@@ -440,6 +460,7 @@
                 const ratingValue = event.average_rating > 0 ? parseFloat(event.average_rating).toFixed(1) : '—';
                 const reviewsText = event.review_count > 0 ? `⭐ ${ratingValue} (${event.review_count} reviews)` : 'No reviews yet';
                 const formattedDate = formatDate(event.event_date || event.date_str);
+                const formattedTime = formatTime(event.time);
 
                 card.innerHTML = `
                     <div class="card-header-top">
@@ -457,12 +478,13 @@
                         <div class="rating-line">${reviewsText}</div>
                         <h3 class="event-title-main">${event.title || 'Event by ' + clubName}</h3>
                         <div class="event-info-row">
-                            <span style="font-size:0.85rem; opacity:0.8;">📅 ${formattedDate}</span>
+                            <span style="font-size:0.85rem; opacity:0.8;">📅 ${formattedDate} ${formattedTime}</span>
                             <span style="font-size:0.85rem; opacity:0.8; margin-left: 15px;">📍 ${event.venue || 'MJCET Campus'}</span>
                         </div>
                         <p class="event-desc-snippet">${event.description || "No description provided."}</p>
                     </div>
                 `;
+
                 card.onclick = () => window.open(`event_details.html?id=${event.id}`, '_blank');
                 grid.appendChild(card);
             });
