@@ -30,7 +30,7 @@ Instagram Posts
     → Extracted Text (data/extracted_events.json)
     → NLP Processing (ml/nlp_processor.py)
     → Structured Data (data/final_events.json)
-    → SQLite Database (campus_events.db)
+    → SQLite Database Local SQLite database (not tracked in repository)
     → FastAPI Backend (backend/main.py)
     → Frontend Dashboard (frontend/app.html)
 ```
