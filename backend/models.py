@@ -45,7 +45,7 @@ class Event(Base):
     club_name = Column(String, index=True)
     profile_pic = Column(String, nullable=True)
     image_path = Column(String)
-    source_url = Column(String, unique=True)
+    source_url = Column(String, nullable=True)
     category = Column(String, nullable=True)
     registration_link = Column(String, nullable=True)
     last_register_date = Column(String, nullable=True)

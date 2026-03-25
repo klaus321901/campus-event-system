@@ -20,11 +20,14 @@ root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if root_dir not in sys.path:
     sys.path.append(root_dir)
 
-try:
-    from ml.gemini_refiner import refine_event_with_gemini
-except ImportError:
-    print("[WARNING] Could not import gemini_refiner. 'Refine' functionality will be limited.")
-    refine_event_with_gemini = None
+# Experimental AI refinement module (disabled for final project)
+# try:
+#     from ml.gemini_refiner import refine_event_with_gemini
+# except ImportError:
+#     print("[WARNING] Could not import gemini_refiner. 'Refine' functionality will be limited.")
+#     refine_event_with_gemini = None
+refine_event_with_gemini = None
+
 
 def normalize_time(time_str: Optional[str]) -> Optional[str]:
     """Normalize mixed time formats (12h/24h) to HH:MM (24h)."""
@@ -106,39 +109,22 @@ class EventCreate(BaseModel):
 @app.post("/events/add")
 def add_event_manually(event: EventCreate, db: Session = Depends(database.get_db)):
     """Admin: manually add a new event directly to PostgreSQL."""
-    # Normalize source_url: Empty string or whitespace becomes None (NULL in DB)
+
+    # Normalize source_url: "" -> None
     event_source_url = event.source_url.strip() if event.source_url and event.source_url.strip() else None
 
+    # Parse date
     actual_date = None
     if event.event_date:
         try:
             actual_date = datetime.strptime(event.event_date, "%Y-%m-%d")
         except ValueError:
             pass
-            
+
+    # Normalize time
     normalized_time = normalize_time(event.event_time)
 
-    # Issue 1: source_url override logic
-    if event_source_url:
-        existing = db.query(models.Event).filter(models.Event.source_url == event_source_url).first()
-        if existing:
-            # Update existing event (likely from instagram scraper)
-            existing.title = event.title
-            existing.club_name = event.club_name
-            existing.description = event.description or existing.description
-            existing.event_date = actual_date
-            existing.date_str = event.event_date
-            existing.venue = event.venue or existing.venue
-            existing.category = event.category or existing.category
-            existing.registration_link = event.registration_link or existing.registration_link
-            existing.image_path = event.image_path or existing.image_path
-            existing.time = normalized_time
-            existing.source_type = "manual"
-            existing.is_published = True
-            db.commit()
-            db.refresh(existing)
-            return {"message": "Existing event updated and published", "id": existing.id}
-
+    # Always insert new row
     new_event = models.Event(
         title=event.title,
         club_name=event.club_name,
@@ -151,7 +137,7 @@ def add_event_manually(event: EventCreate, db: Session = Depends(database.get_db
         source_url=event_source_url,
         image_path=event.image_path,
         profile_pic=None,
-        is_published=True,   # Manually added events go live immediately
+        is_published=True,
         source_type="manual",
         time=normalized_time,
     )
@@ -159,6 +145,7 @@ def add_event_manually(event: EventCreate, db: Session = Depends(database.get_db
     db.add(new_event)
     db.commit()
     db.refresh(new_event)
+
     return {"message": "Event added successfully", "id": new_event.id}
 
 
@@ -316,19 +303,6 @@ def update_event(event_id: int, event_update: EventUpdate, db: Session = Depends
     if event_update.source_url is not None:
         event_update.source_url = event_update.source_url.strip() if event_update.source_url.strip() else None
 
-    # Check if another event exists with the same source_url
-    if event_update.source_url:
-        existing = db.query(models.Event).filter(
-            models.Event.source_url == event_update.source_url,
-            models.Event.id != event_id
-        ).first()
-        if existing:
-            raise HTTPException(
-                status_code=400,
-                detail="An event with this source URL already exists."
-            )
-
-
     update_data = event_update.dict(exclude_unset=True)
     
     # Handle event_date specially to update both date_str and event_date
@@ -352,12 +326,6 @@ def update_event(event_id: int, event_update: EventUpdate, db: Session = Depends
     try:
         db.commit()
         db.refresh(db_event)
-    except IntegrityError:
-        db.rollback()
-        raise HTTPException(
-            status_code=400,
-            detail="An event with this source URL already exists."
-        )
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
@@ -674,48 +642,50 @@ def analyze_event(event_id: int, db: Session = Depends(database.get_db)):
 
 # --- ADMIN POWER TOOLS ---
 
-@app.post("/admin/events/{event_id}/refine")
-def refine_event(event_id: int, db: Session = Depends(database.get_db)):
-    """Manually trigger Gemini AI to refine event details from image/caption."""
-    if not refine_event_with_gemini:
-        raise HTTPException(status_code=500, detail="Gemini refiner not available")
+# Experimental AI refinement module (disabled for final project)
+# @app.post("/admin/events/{event_id}/refine")
+# def refine_event(event_id: int, db: Session = Depends(database.get_db)):
+#     """Manually trigger Gemini AI to refine event details from image/caption."""
+#     if not refine_event_with_gemini:
+#         raise HTTPException(status_code=500, detail="Gemini refiner not available")
+# 
+#     db_event = db.query(models.Event).filter(models.Event.id == event_id).first()
+#     if not db_event:
+#         raise HTTPException(status_code=404, detail="Event not found")
+#         
+#     # Get image path and description
+#     image_path = db_event.image_path
+#     if not image_path or not os.path.exists(image_path):
+#         # Try finding it in data/images if absolute path fails
+#         alt_path = os.path.join(root_dir, image_path) if image_path else ""
+#         if os.path.exists(alt_path):
+#             image_path = alt_path
+#         else:
+#             raise HTTPException(status_code=400, detail=f"Image file not found: {image_path}")
+# 
+#     print(f"[ADMIN] Refining event {event_id} with Gemini...")
+#     refined_data = refine_event_with_gemini(image_path, db_event.description)
+#     
+#     if not refined_data:
+#         raise HTTPException(status_code=500, detail="Gemini failed to refine event")
+#         
+#     # Update fields
+#     if refined_data.get("title"): db_event.title = refined_data["title"]
+#     if refined_data.get("event_date"):
+#         try:
+#             db_event.event_date = datetime.strptime(refined_data["event_date"], "%Y-%m-%d")
+#             db_event.date_str = refined_data["event_date"]
+#         except:
+#             pass
+#     if refined_data.get("event_time"): db_event.time = refined_data["event_time"]
+#     if refined_data.get("venue"): db_event.venue = refined_data["venue"]
+#     if refined_data.get("category"): db_event.category = refined_data["category"]
+#     if refined_data.get("registration_link"): db_event.registration_link = refined_data["registration_link"]
+#     
+#     db.commit()
+#     db.refresh(db_event)
+#     return {"message": "Event refined successfully!", "data": refined_data}
 
-    db_event = db.query(models.Event).filter(models.Event.id == event_id).first()
-    if not db_event:
-        raise HTTPException(status_code=404, detail="Event not found")
-        
-    # Get image path and description
-    image_path = db_event.image_path
-    if not image_path or not os.path.exists(image_path):
-        # Try finding it in data/images if absolute path fails
-        alt_path = os.path.join(root_dir, image_path) if image_path else ""
-        if os.path.exists(alt_path):
-            image_path = alt_path
-        else:
-            raise HTTPException(status_code=400, detail=f"Image file not found: {image_path}")
-
-    print(f"[ADMIN] Refining event {event_id} with Gemini...")
-    refined_data = refine_event_with_gemini(image_path, db_event.description)
-    
-    if not refined_data:
-        raise HTTPException(status_code=500, detail="Gemini failed to refine event")
-        
-    # Update fields
-    if refined_data.get("title"): db_event.title = refined_data["title"]
-    if refined_data.get("event_date"):
-        try:
-            db_event.event_date = datetime.strptime(refined_data["event_date"], "%Y-%m-%d")
-            db_event.date_str = refined_data["event_date"]
-        except:
-            pass
-    if refined_data.get("event_time"): db_event.time = refined_data["event_time"]
-    if refined_data.get("venue"): db_event.venue = refined_data["venue"]
-    if refined_data.get("category"): db_event.category = refined_data["category"]
-    if refined_data.get("registration_link"): db_event.registration_link = refined_data["registration_link"]
-    
-    db.commit()
-    db.refresh(db_event)
-    return {"message": "Event refined successfully!", "data": refined_data}
 
 @app.delete("/admin/events/delete-past")
 def delete_past_events(db: Session = Depends(database.get_db)):

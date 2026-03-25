@@ -140,12 +140,16 @@
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="form-group">
-                        <label>Date (YYYY-MM-DD)</label>
-                        <input type="text" id="editDate" placeholder="2026-03-24">
+                        <input type="date" id="editDate" placeholder="2026-03-24"
+                            oninput="updateAdminDateDisplay(this.value)">
+                        <div id="readableDateDisplay"
+                            style="font-size: 0.85rem; color: var(--accent); margin-top: 5px; min-height: 1.2rem;">
+                        </div>
+
                     </div>
                     <div class="form-group">
-                        <label>Time (HH:MM)</label>
-                        <input type="time" id="editTime">
+                        <label>Time (e.g. 8:30 PM - 9:30 PM)</label>
+                        <input type="text" id="editTime" placeholder="8:30 PM - 9:30 PM">
                     </div>
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
@@ -361,7 +365,7 @@
         }
 
         function populateClubFilter(events) {
-            const clubs = [...new Set(events.filter(e => e.is_published).map(e => e.club_name))].sort();
+            const clubs = [...new Set(events.map(e => e.club_name))].sort();
             const select = document.getElementById('clubFilter');
             const current = select.value;
             select.innerHTML = '<option value="all">All Clubs</option>';
@@ -399,13 +403,28 @@
 
         function formatTime(timeStr) {
             if (!timeStr || timeStr === 'TBA') return '';
+            const t = timeStr.trim().toUpperCase();
+            // If already has AM/PM or doesn't look like HH:MM, return as is
+            if (t.includes('AM') || t.includes('PM') || !t.includes(':')) return timeStr;
+
             try {
-                const [hours, minutes] = timeStr.split(':');
+                const parts = t.split(':');
+                if (parts.length < 2) return timeStr;
+                const hours = parseInt(parts[0]);
+                const minutes = parseInt(parts[1]);
                 const date = new Date();
-                date.setHours(parseInt(hours), parseInt(minutes));
+                date.setHours(hours, minutes);
                 return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
             } catch (e) { return timeStr; }
         }
+
+        function updateAdminDateDisplay(val) {
+            const display = document.getElementById('readableDateDisplay');
+            if (display) {
+                display.textContent = val ? `📅 ${formatDate(val)}` : '';
+            }
+        }
+
 
 
         function renderEvents(events) {
@@ -416,26 +435,12 @@
             const category = document.querySelector('.filter-btn.active').dataset.filter;
             const selectedClub = document.getElementById('clubFilter').value;
 
-            const now = new Date();
-
             const filtered = events.filter(e => {
-                if (!e.is_published) return false;
                 const matchesSearch = (e.title || "").toLowerCase().includes(searchTerm) || (e.club_name || "").toLowerCase().includes(searchTerm);
                 const matchesCategory = category === 'all' || (e.category || "").toLowerCase() === category.toLowerCase();
                 const matchesClub = selectedClub === 'all' || e.club_name === selectedClub;
 
-                // Issue 5: Accurate Event ended detection
-                let isConcluded = false;
-                if (e.event_date) {
-                    const eventDate = new Date(e.event_date);
-                    if (e.time) {
-                        const [h, m] = e.time.split(':');
-                        eventDate.setHours(parseInt(h), parseInt(m));
-                    }
-                    isConcluded = eventDate < now;
-                }
-
-                return matchesSearch && matchesCategory && matchesClub && !isConcluded;
+                return matchesSearch && matchesCategory && matchesClub;
             });
 
 
@@ -478,8 +483,9 @@
                         <div class="rating-line">${reviewsText}</div>
                         <h3 class="event-title-main">${event.title || 'Event by ' + clubName}</h3>
                         <div class="event-info-row">
-                            <span style="font-size:0.85rem; opacity:0.8;">📅 ${formattedDate} ${formattedTime}</span>
-                            <span style="font-size:0.85rem; opacity:0.8; margin-left: 15px;">📍 ${event.venue || 'MJCET Campus'}</span>
+                            <span style="font-size:0.85rem; opacity:0.8;">📅 ${formattedDate}</span>
+                            ${formattedTime ? `<span style="font-size:0.85rem; opacity:0.8;">⏰ ${formattedTime}</span>` : ''}
+                            <span style="font-size:0.85rem; opacity:0.8;">📍 ${event.venue || 'MJCET Campus'}</span>
                         </div>
                         <p class="event-desc-snippet">${event.description || "No description provided."}</p>
                     </div>
@@ -597,6 +603,7 @@
             if (!confirm("Are you sure? This will delete the event and its images.")) return;
             await fetch(`/events/${id}`, { method: 'DELETE' });
             loadEvents();
+            loadAdminEvents();
         }
 
         async function syncInstagram() {
@@ -618,7 +625,9 @@
             document.getElementById('editTitle').value = '';
             document.getElementById('editClubName').value = '';
             document.getElementById('editDate').value = '';
+            updateAdminDateDisplay('');
             document.getElementById('editTime').value = '';
+
             document.getElementById('editCategory').value = 'General';
             document.getElementById('editVenue').value = 'MJCET Campus';
             document.getElementById('editSourceUrl').value = '';
@@ -636,7 +645,10 @@
             document.getElementById('saveBtn').textContent = 'Save Changes';
             document.getElementById('editTitle').value = event.title || '';
             document.getElementById('editClubName').value = event.club_name || '';
-            document.getElementById('editDate').value = event.date_str || (event.event_date ? event.event_date.split('T')[0] : '');
+            const dVal = event.date_str || (event.event_date ? event.event_date.split('T')[0] : '');
+            document.getElementById('editDate').value = dVal;
+            updateAdminDateDisplay(dVal);
+
             document.getElementById('editTime').value = event.time || '';
             document.getElementById('editCategory').value = event.category || 'General';
             document.getElementById('editVenue').value = event.venue || '';
@@ -677,11 +689,13 @@
                 return alert("Title, Club Name, and Date are required!");
             }
 
+            const valTime = document.getElementById('editTime').value;
             const data = {
                 title: title,
                 club_name: club_name,
                 event_date: event_date,
-                time: document.getElementById('editTime').value,
+                time: valTime,
+                event_time: valTime,
                 category: document.getElementById('editCategory').value,
                 venue: document.getElementById('editVenue').value,
                 source_url: document.getElementById('editSourceUrl').value,
@@ -702,7 +716,8 @@
                 });
                 if (res.ok) {
                     closeAllModals();
-                    loadEvents();
+                    await loadEvents();
+                    await loadAdminEvents(); // Ensure admin list also refreshes
                 } else {
                     const err = await res.json();
                     alert(err.detail || "Save failed");
