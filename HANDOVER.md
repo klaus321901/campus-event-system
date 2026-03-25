@@ -18,7 +18,7 @@ A full-stack **Campus Event System** for MJCET college.
 | Layer | Technology |
 |---|---|
 | Backend | FastAPI (Python) |
-| Database | PostgreSQL (password: `3366`, db: `campus_events`) |
+| Database | PostgreSQL (password: `xyz`, db: `campus_events`) |
 | ORM | SQLAlchemy |
 | AI | Google Gemini (`gemini-2.5-flash` — confirmed working) |
 | Scraper | Selenium + Chrome (persistent session) |
@@ -53,17 +53,7 @@ campus_event_system/
 
 ---
 
-## 🔌 .env Configuration (`backend/.env`)
-```
-GEMINI_API_KEY=AIzaSyAhd7xRG6ZjMZlYoOBSDc1XDioP6vDN4sk
-GEMINI_API_KEY_BACKUP=AIzaSyDOWtuYF-p6PJZM9JM5_oXDssAdz93z5e8
-DATABASE_URL=postgresql://postgres:3366@localhost:5432/campus_events
-SECRET_KEY=9a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=43200
-```
 
----
 
 ## 🤖 Gemini API — Confirmed Working Models (tested 2026-02-24)
 | Model | Status |
