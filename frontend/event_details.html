@@ -133,7 +133,7 @@
         .event-image {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
         }
 
         .info-panel {
@@ -573,26 +573,20 @@
         }
 
         function formatTime(timeStr) {
-            if (!timeStr || timeStr === 'TBA') return null;
-            const start = extractStartTime(timeStr);
-            if (!start) return timeStr;
-            // Support HH:mm or HH:mm AM/PM
-            const timeMatch = start.match(/(\d{1,2})(?::(\d{2}))?\s*(AM|PM)?/i);
-            if (!timeMatch) return timeStr;
+            if (!timeStr || timeStr === 'TBA') return '';
+            const t = timeStr.trim().toUpperCase();
+            // If already has AM/PM or doesn't look like HH:MM, return as is
+            if (t.includes('AM') || t.includes('PM') || !t.includes(':')) return timeStr;
 
-            let [_, hours, minutes, ampm] = timeMatch;
-            hours = parseInt(hours);
-            minutes = parseInt(minutes || 0);
-
-            if (ampm) {
-                ampm = ampm.toUpperCase();
-                hours = hours % 12 || 12;
-            } else {
-                // assume 24h if missing AM/PM
-                ampm = hours >= 12 ? "PM" : "AM";
-                hours = hours % 12 || 12;
-            }
-            return `${hours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+            try {
+                const parts = t.split(':');
+                if (parts.length < 2) return timeStr;
+                const hours = parseInt(parts[0]);
+                const minutes = parseInt(parts[1]);
+                const date = new Date();
+                date.setHours(hours, minutes);
+                return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+            } catch (e) { return timeStr; }
         }
 
         function extractStartTime(timeStr) {
@@ -711,7 +705,6 @@
                             <div class="club-info-meta">
                                 <div class="club-name-row">
                                     <div class="club-name-text">${clubName}</div>
-                                    <button id="followBtn" class="follow-btn">+ Follow Club</button>
                                 </div>
                                 <div class="event-category-tag">${event.category || 'General'}</div>
                             </div>

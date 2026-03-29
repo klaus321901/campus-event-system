@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Analytics | Campus Events</title>
+    <title>Event Analytics | Campus Connect</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -178,15 +178,7 @@
                 </div>
             </div>
 
-            <!-- Insights Row -->
-            <div class="card">
-                <h3 style="color: var(--accent-blue);">💡 AI-Powered Insights & Suggestions</h3>
-                <p id="aiSummary" style="color: var(--text-secondary); margin-bottom: 20px;">Analyzing feedback
-                    patterns...</p>
-                <ul id="suggestionList" class="suggestions-list">
-                    <!-- Javascript will populate this -->
-                </ul>
-            </div>
+
         </div>
     </div>
 
@@ -238,8 +230,7 @@
             renderSentimentChart(data.sentiment);
             renderKeywordChart(data.keywords);
 
-            // 3. AI Insights
-            generateInsights(data);
+
         }
 
         function renderSentimentChart(sentiment) {
@@ -297,48 +288,7 @@
             });
         }
 
-        function generateInsights(data) {
-            const list = document.getElementById('suggestionList');
-            const summary = document.getElementById('aiSummary');
-            list.innerHTML = '';
 
-            let sentimentText = "";
-            let suggestions = [];
-
-            // Logic
-            if (data.sentiment.positive > 70) {
-                sentimentText = "User sentiment is overwhelmingly positive! 🚀";
-                suggestions.push("Focus on retention: Send a 'Thank You' email to attendees.");
-            } else if (data.sentiment.negative > 30) {
-                sentimentText = "There are critical issues that need addressing.";
-                suggestions.push("Review negative feedback immediately to spot deal-breakers.");
-            } else {
-                sentimentText = "Sentiment is mixed. There is room for improvement.";
-            }
-
-            // Keyword Logic
-            const keys = data.keywords.map(k => k.toLowerCase());
-            if (keys.some(k => ['food', 'catering', 'snacks'].includes(k))) {
-                suggestions.push("Catering was a major talking point. Audit your food vendor.");
-            }
-            if (keys.some(k => ['sound', 'audio', 'mic', 'music'].includes(k))) {
-                suggestions.push("Audio issues detected. verify AV equipment setup.");
-            }
-            if (keys.some(k => ['delay', 'late', 'time'].includes(k))) {
-                suggestions.push("Punctuality concerns. Tighten the schedule next time.");
-            }
-
-            // Render
-            summary.textContent = sentimentText;
-            if (suggestions.length === 0) suggestions.push("No specific anomalies detected. Standard post-event follow-up recommended.");
-
-            suggestions.forEach(s => {
-                const li = document.createElement('li');
-                li.className = 'suggestion-item';
-                li.innerHTML = `<span class="suggestion-icon">👉</span> ${s}`;
-                list.appendChild(li);
-            });
-        }
 
         init();
     </script>
