@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Campus Connect | Events Hub</title>
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="data:,">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
 </head>
@@ -240,6 +241,90 @@
         let currentEventId = null;
 
         // --- AUTH LOGIC ---
+         // --- NOTIFICATION ENGINE ---
+        if ("Notification" in window && Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
+
+        let reminderQueue = [];
+        let isShowingReminder = false;
+
+        function startReminderEngine() {
+            setInterval(() => {
+                console.log("ENGINE RUNNING");
+                let reminders = JSON.parse(localStorage.getItem("campus_event_reminders") || "[]");
+                let updated = false;
+
+                reminders.forEach(rem => {
+                    if (!rem.notified && Date.now() >= rem.triggerTime) {
+                        reminderQueue.push(rem);
+                        rem.notified = true;
+                        updated = true;
+                    }
+                });
+
+                if (updated) {
+                    const activeReminders = reminders.filter(rem => !rem.notified);
+                    localStorage.setItem("campus_event_reminders", JSON.stringify(activeReminders));
+                }
+                processReminderQueue();
+            }, 5000);
+        }
+
+        function processReminderQueue() {
+            if (isShowingReminder || reminderQueue.length === 0) return;
+
+            isShowingReminder = true;
+
+            const rem = reminderQueue.shift();
+
+            // 🔔 SOUND
+            try {
+                const audio = new Audio("/static/sounds/bell.mp3");
+                audio.play().catch(() => { });
+            } catch (e) { }
+
+            // 🌐 NOTIFICATION
+            if ("Notification" in window && Notification.permission === "granted") {
+                const notification = new Notification("Campus Connect", {
+                    body: rem.title + " starts soon"
+                });
+
+                notification.onclick = () => {
+                    window.focus();
+                    window.open(rem.eventLink || `/event_details.html?id=${rem.eventId}`, "_blank");
+                };
+            }
+
+            // 📦 MODAL
+            const modal = document.getElementById("reminderTriggerModal");
+            if (modal) {
+                const text = document.getElementById("remTriggerText");
+                if (text) text.innerText = rem.title + " is starting soon";
+
+                const viewBtn = document.getElementById("remTriggerView");
+                if (viewBtn) {
+                    viewBtn.onclick = () => {
+                        window.open(rem.eventLink || `/event_details.html?id=${rem.eventId}`, "_blank");
+                    };
+                }
+
+                modal.classList.add("active");
+            }
+
+            // ⏱ AUTO CLOSE after 4.5 seconds
+            setTimeout(() => {
+                if (reminderQueue.length > 0) {
+                    if (modal) modal.classList.remove("active");
+                    isShowingReminder = false;
+                    processReminderQueue();
+                } else {
+                    // Last reminder → keep open
+                    isShowingReminder = false;
+                }
+            }, 4500);
+        }
+
         async function checkAuth() {
             if (!authToken) {
                 renderAuthUI(null);
@@ -736,24 +821,6 @@
             }
         };
 
-        async function checkReminders() {
-            if (!authToken) return;
-            try {
-                const res = await fetch('/users/me/reminders', {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
-                const reminders = await res.json();
-
-                if (reminders && reminders.length > 0) {
-                    // Play sound ONCE for the whole batch
-                    document.getElementById('reminder-sound').play().catch(e => console.log("Sound blocked by browser"));
-
-                    reminders.forEach(r => {
-                        showToast(`🔔 ${r.type} Before: ${r.event_title}`);
-                    });
-                }
-            } catch (e) { console.error("Reminder check failed", e); }
-        }
 
         function showToast(message) {
             const container = document.getElementById('toast-container');
@@ -808,11 +875,31 @@
         });
 
         // Initialize
-        checkAuth();
-        loadEvents();
-        setInterval(checkReminders, 60000);
-        setTimeout(checkReminders, 2000);
+        document.addEventListener("DOMContentLoaded", () => {
+            checkAuth();
+            loadEvents();
+            startReminderEngine();
+        });
     </script>
+    <!-- Unified Reminder POPUP Modal -->
+    <div id="reminderTriggerModal" class="modal">
+        <div class="modal-content premium-modal-content"
+             style="background: rgba(15, 25, 35, 0.98); border: 1px solid rgba(0, 210, 255, 0.4); width: 420px; text-align: center; padding: 40px;">
+            <h2 id="remTriggerTitle" style="font-size: 2.5rem; margin-bottom: 10px;">🔔</h2>
+            <h3 style="font-size: 1.5rem; margin-bottom: 10px; color: var(--accent);">Reminder</h3>
+            <p id="remTriggerText" style="opacity: 0.9; margin-bottom: 30px; line-height: 1.5; font-size: 1.1rem;"></p>
+            <div style="display: flex; gap: 15px;">
+                <button id="remTriggerView"
+                    style="flex: 1; padding: 16px; background: var(--accent); color: black; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 1rem;">View Event</button>
+                <button onclick="document.getElementById('reminderTriggerModal').classList.remove('active')"
+                    style="flex: 0.8; padding: 16px; background: rgba(255,255,255,0.05); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 1rem;">Dismiss</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICATION SOUND -->
+    <audio id="reminder-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+
 </body>
 
 </html>

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Campus Connect | Event Details</title>
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="data:,">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <style>
@@ -415,9 +416,24 @@
     <div class="container">
         <div class="header-nav">
             <a href="/" class="back-btn">← Back to Events</a>
-            <div class="action-group">
+            <div class="action-group" style="display: flex; align-items: center; gap: 12px;">
                 <button class="btn-action btn-rate" id="cardRateBtn">⭐ Rate Event</button>
-                <button class="btn-action btn-remind" id="cardRemindBtn" style="display: none;">🔔 Set Reminder</button>
+                
+                <!-- Reminder States -->
+                <button class="btn-action btn-remind" id="setReminderBtn" style="display: none;">🔔 Set Reminder</button>
+                
+                <div id="activeReminderUI"
+                    style="display: none; flex-direction: column; gap: 8px; align-items: flex-end;">
+                    <span id="reminderStatusText"
+                        style="font-size: 0.9rem; color: var(--accent); font-weight: 700; background: rgba(0,210,255,0.05); padding: 8px 15px; border-radius: 20px; border: 1px solid rgba(0,210,255,0.1);">Reminder
+                        set</span>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-action" id="updateBtn"
+                            style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 18px; border-radius: 20px; font-weight: 600; cursor: pointer;">Update</button>
+                        <button class="btn-action" id="cancelBtn"
+                            style="background: rgba(255,82,82,0.1); border: 1px solid #ff5252; color: #ff5252; padding: 8px 18px; border-radius: 20px; font-weight: 700; cursor: pointer;">Cancel</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -433,23 +449,25 @@
             style="background: rgba(15, 25, 35, 0.98); border: 1px solid rgba(255,255,255,0.1); width: 480px; padding: 40px;">
             <div style="text-align: center; margin-bottom: 25px;">
                 <h2 style="font-size: 1.8rem; margin-bottom: 5px;">🔔 Set Reminder</h2>
-                <p style="opacity: 0.6; font-size: 0.95rem;">Choose when to be notified:</p>
+                <p id="remModalSub" style="opacity: 0.6; font-size: 0.95rem;">Choose when to be notified:</p>
             </div>
-            <div class="rem-grid-v2"
+            <div class="rem-grid-v2" id="remOptionsGrid"
                 style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
-                <button id="remBtn30m" class="rem-btn-v2" onclick="setReminder('30m')"
+                <button id="remBtn30m" class="rem-btn-v2" onclick="selectReminderOption('30m')"
                     style="padding: 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: white; border-radius: 12px; font-weight: 600; cursor: pointer;">30
                     Min Before</button>
-                <button id="remBtn1h" class="rem-btn-v2" onclick="setReminder('1h')"
+                <button id="remBtn1h" class="rem-btn-v2" onclick="selectReminderOption('1h')"
                     style="padding: 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: white; border-radius: 12px; font-weight: 600; cursor: pointer;">1
                     Hour Before</button>
-                <button id="remBtn3h" class="rem-btn-v2" onclick="setReminder('3h')"
+                <button id="remBtn3h" class="rem-btn-v2" onclick="selectReminderOption('3h')"
                     style="padding: 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: white; border-radius: 12px; font-weight: 600; cursor: pointer;">3
                     Hours Before</button>
-                <button id="remBtn24h" class="rem-btn-v2" onclick="setReminder('24h')"
+                <button id="remBtn24h" class="rem-btn-v2" onclick="selectReminderOption('24h')"
                     style="padding: 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: white; border-radius: 12px; font-weight: 600; cursor: pointer;">1
                     Day Before</button>
             </div>
+            <button id="remConfirmBtn" onclick="confirmReminder()" disabled
+                style="width: 100%; padding: 16px; background: var(--accent); color: black; border-radius: 12px; font-weight: 800; cursor: pointer; border: none; opacity: 0.3; pointer-events: none; margin-bottom: 10px;">OK</button>
             <button class="cancel-btn-v2" onclick="closeModals()"
                 style="width: 100%; padding: 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: #666; font-weight: 700; cursor: pointer; border: none;">Cancel</button>
         </div>
@@ -572,6 +590,63 @@
             } catch (e) { return dateStr; }
         }
 
+        let selectedReminderType = null;
+        const reminderLabels = { '30m': '30 minutes', '1h': '1 hour', '3h': '3 hours', '24h': '1 day' };
+
+        function updateReminderUI() {
+            if (!loadedEvent) return;
+            const eventDateTime = parseTimeToDate(loadedEvent.event_date || loadedEvent.date_str, loadedEvent.time);
+            const isPast = eventDateTime && eventDateTime <= new Date();
+
+            const setBtn = document.getElementById('setReminderBtn');
+            const activeUI = document.getElementById('activeReminderUI');
+            const statusTxt = document.getElementById('reminderStatusText');
+
+            if (!setBtn || !activeUI) return;
+
+            if (!currentUser || currentUser.role !== 'student') {
+                setBtn.style.display = 'none';
+                activeUI.style.display = 'none';
+                return;
+            }
+
+            const existing = getReminderForEvent(currentEventId);
+
+            if (existing) {
+                setBtn.style.display = 'none';
+                activeUI.style.display = 'flex';
+                statusTxt.innerText = "Reminder set for " + (reminderLabels[existing.type] || "this event");
+            } else {
+                activeUI.style.display = 'none';
+                if (!isPast && loadedEvent.time !== 'TBA') {
+                    const diff = eventDateTime - new Date();
+                    if (diff < 1800000) { // Less than 30 minutes
+                        setBtn.style.display = 'inline-block';
+                        setBtn.innerHTML = "🕒 Event Starting Soon";
+                        setBtn.disabled = true;
+                        setBtn.style.opacity = "0.7";
+                    } else {
+                        setBtn.style.display = 'inline-block';
+                        setBtn.innerHTML = "🔔 Set Reminder";
+                        setBtn.disabled = false;
+                        setBtn.style.opacity = "1";
+                    }
+                } else if (isPast) {
+                    setBtn.style.display = 'inline-block';
+                    setBtn.innerHTML = "🏳️ Event Ended";
+                    setBtn.disabled = true;
+                    setBtn.style.opacity = "0.5";
+                } else {
+                    setBtn.style.display = 'none';
+                }
+            }
+        }
+
+        function getReminderForEvent(eventId) {
+            const reminders = JSON.parse(localStorage.getItem("campus_event_reminders") || "[]");
+            return reminders.find(r => String(r.eventId) === String(eventId) && r.notified === false);
+        }
+
         function formatTime(timeStr) {
             if (!timeStr || timeStr === 'TBA') return '';
             const t = timeStr.trim().toUpperCase();
@@ -638,59 +713,11 @@
             const todayNow = new Date();
             const isPast = eventDateTime && eventDateTime <= todayNow;
 
-            // Handle Reminder UI State Synchronously to prevent flicker
-            {
-                const remBtn = document.getElementById('cardRemindBtn');
-                if (!remBtn) return;
-
-                if (!currentUser || currentUser.role !== 'student') {
-                    remBtn.style.display = 'none';
-                    return;
-                }
-
-                const reminders = JSON.parse(localStorage.getItem('campus_event_reminders') || '[]');
-                const existing = reminders.find(r => String(r.eventId) === String(currentEventId));
-
-                let statusDisplay = document.getElementById('reminderStatusDisplay');
-                if (!statusDisplay) {
-                    statusDisplay = document.createElement('div');
-                    statusDisplay.id = 'reminderStatusDisplay';
-                    remBtn.parentNode.appendChild(statusDisplay);
-                }
-
-                if (isPast) {
-                    remBtn.style.display = 'flex';
-                    remBtn.innerHTML = "🏳️ Event Ended";
-                    remBtn.style.opacity = "0.5";
-                    remBtn.disabled = true;
-                    statusDisplay.style.display = 'none';
-                } else if (!event.time || event.time === 'TBA') {
-                    remBtn.style.display = 'flex';
-                    remBtn.innerHTML = "🔕 Reminder unavailable (time not specified)";
-                    remBtn.style.fontSize = "0.74rem";
-                    remBtn.style.opacity = "0.5";
-                    remBtn.disabled = true;
-                    statusDisplay.style.display = 'none';
-                } else if (existing) {
-                    remBtn.style.display = 'none';
-                    statusDisplay.innerHTML = `
-                        <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
-                            <span style="font-size: 0.85rem; color: var(--accent); font-weight: 600;">🔔 Reminder set: ${existing.reminderMinutes} minutes before</span>
-                            <div style="display: flex; gap: 8px;">
-                                <button class="btn-action btn-remind" style="padding: 6px 14px; font-size: 0.75rem;" onclick="document.getElementById('cardRemindBtn').click()">Update</button>
-                                <button class="btn-action" style="padding: 6px 14px; font-size: 0.75rem; background: rgba(255,82,82,0.1); border: 1px solid #ff5252; color: #ff5252;" onclick="cancelReminder()">Cancel</button>
-                            </div>
-                        </div>
-                    `;
-                    statusDisplay.style.display = 'block';
-                } else {
-                    remBtn.style.display = 'flex';
-                    remBtn.innerHTML = "🔔 Set Reminder";
-                    remBtn.style.opacity = "1";
-                    remBtn.disabled = false;
-                    statusDisplay.style.display = 'none';
-                }
-            }
+            // Handle Reminder UI State
+            updateReminderUI();
+            setInterval(() => {
+                updateReminderUI();
+            }, 60000);
 
             const hasImage = img && img.trim() !== '';
             document.getElementById('eventDisplay').innerHTML = `
@@ -734,41 +761,77 @@
                 if (!authToken) return alert("Please Login on the dashboard first to leave a review!");
                 document.getElementById('rateModal').classList.add('active');
             };
-            document.getElementById('cardRemindBtn').onclick = (e) => {
+            const openModalHandler = (e) => {
                 e.preventDefault();
-                if (!authToken) return alert("Please Login on the dashboard first to set reminders!");
+                if (!authToken) return alert("Please Login first!");
 
                 const eventStart = parseTimeToDate(loadedEvent.event_date || loadedEvent.date_str, loadedEvent.time);
+                if (!eventStart) return alert("Could not parse event date/time.");
 
-                // Existing Reminder Check
-                const reminders = JSON.parse(localStorage.getItem('campus_event_reminders') || '[]');
-                const existing = reminders.find(r => String(r.eventId) === String(currentEventId));
-                const minMapToId = { 30: 'remBtn30m', 60: 'remBtn1h', 180: 'remBtn3h', 1440: 'remBtn24h' };
+                const now = Date.now();
+                const deltaMap = { '30m': 1800000, '1h': 3600000, '3h': 10800000, '24h': 86400000 };
 
-                if (eventStart) {
-                    const nowTS = new Date().getTime();
-                    const deltaMap = { '30m': 30 * 60000, '1h': 60 * 60000, '3h': 180 * 60000, '24h': 86400000 };
-                    Object.keys(deltaMap).forEach(key => {
-                        const btn = document.getElementById('remBtn' + key);
-                        if (btn) {
-                            // Only disable if the event itself has already passed
-                            const eventStarted = eventStart.getTime() <= nowTS;
-                            btn.disabled = eventStarted;
-                            btn.style.opacity = eventStarted ? "0.3" : "1";
-                            btn.style.cursor = eventStarted ? "not-allowed" : "pointer";
+                let validCount = 0;
+                const modalSub = document.getElementById('remModalSub');
+                const grid = document.getElementById('remOptionsGrid');
 
-                            // Reset visibility
-                            btn.style.display = 'block';
+                // Pre-selection check
+                const existing = getReminderForEvent(currentEventId);
+                selectedReminderType = existing ? existing.type : null;
 
-                            // Hide if it matches the current set reminder
-                            if (existing && minMapToId[existing.reminderMinutes] === 'remBtn' + key) {
-                                btn.style.display = 'none';
-                            }
+                Object.keys(deltaMap).forEach(key => {
+                    const btn = document.getElementById('remBtn' + key);
+                    if (btn) {
+                        const triggerTime = eventStart.getTime() - deltaMap[key];
+                        const isPast = triggerTime <= now;
+
+                        // Hide the currently active reminder option
+                        if (existing && key === existing.type) {
+                            btn.style.display = "none";
+                        } else {
+                            btn.style.display = "block";
                         }
-                    });
+
+                        btn.disabled = isPast;
+                        btn.style.opacity = isPast ? "0.3" : "1";
+                        btn.style.cursor = isPast ? "not-allowed" : "pointer";
+                        btn.title = isPast ? "Time passed" : "";
+                        
+                        // Apply pre-selection / reset highlights
+                        if (key === selectedReminderType) {
+                            btn.style.background = 'var(--accent)';
+                            btn.style.color = 'black';
+                        } else {
+                            btn.style.background = 'rgba(255,255,255,0.04)';
+                            btn.style.color = 'white';
+                        }
+
+                        if (!isPast && btn.style.display !== "none") validCount++;
+                    }
+                });
+
+                const confirmBtn = document.getElementById('remConfirmBtn');
+                confirmBtn.disabled = !selectedReminderType;
+                confirmBtn.style.opacity = selectedReminderType ? "1" : "0.3";
+                confirmBtn.style.pointerEvents = selectedReminderType ? "auto" : "none";
+
+                if (modalSub && grid) {
+                    if (validCount === 0) {
+                        modalSub.innerHTML = "<span style='color: #ff5252; font-weight: 700;'>❌ This event is too close to set reminders</span>";
+                        grid.style.display = "none";
+                    } else {
+                        modalSub.innerHTML = "Choose when to be notified:";
+                        grid.style.display = "grid";
+                    }
                 }
+
                 document.getElementById('remModal').classList.add('active');
             };
+
+            if (document.getElementById('setReminderBtn')) document.getElementById('setReminderBtn').onclick = openModalHandler;
+            if (document.getElementById('updateBtn')) document.getElementById('updateBtn').onclick = openModalHandler;
+
+            document.getElementById('cancelBtn').onclick = cancelReminder;
 
             const followBtn = document.getElementById('followBtn');
             if (followBtn) {
@@ -810,152 +873,116 @@
             }
         }
 
-        async function setReminder(type) {
-            if (!authToken) return alert("Please Login first!");
-            if (!currentUser || currentUser.role !== 'student') return alert("Only students can set reminders.");
-            if (!loadedEvent || !loadedEvent.event_date || !loadedEvent.time) return alert("Missing event date/time!");
+        function selectReminderOption(type) {
+            selectedReminderType = type;
+            
+            // UI Update: highlight selected, dim others
+            const options = ['30m', '1h', '3h', '24h'];
+            options.forEach(opt => {
+                const btn = document.getElementById('remBtn' + opt);
+                if (btn) {
+                    if (opt === type) {
+                        btn.style.background = 'var(--accent)';
+                        btn.style.color = 'black';
+                        btn.style.border = '1px solid var(--accent)';
+                    } else {
+                        btn.style.background = 'rgba(255, 255, 255, 0.04)';
+                        btn.style.color = 'white';
+                        btn.style.border = '1px solid rgba(255, 255, 255, 0.08)';
+                    }
+                }
+            });
 
-            const deltaMap = {
-                '30m': 30 * 60 * 1000,
-                '1h': 60 * 60 * 1000,
-                '3h': 3 * 60 * 60 * 1000,
-                '24h': 24 * 60 * 60 * 1000
-            };
-
-            const eventStart = parseTimeToDate(loadedEvent.event_date || loadedEvent.date_str, loadedEvent.time);
-            if (!eventStart) return alert("Could not parse event time. Please use format like 8:30 PM.");
-
-            let remindAtTime = eventStart.getTime() - deltaMap[type];
-            const nowTime = new Date().getTime();
-
-            if (eventStart.getTime() <= nowTime) {
-                return alert("This event has already started.");
+            // Enable OK button
+            const confirmBtn = document.getElementById('remConfirmBtn');
+            if (confirmBtn) {
+                confirmBtn.disabled = false;
+                confirmBtn.style.opacity = "1";
+                confirmBtn.style.pointerEvents = "auto";
             }
-
-            let isImmediate = false;
-            if (remindAtTime <= nowTime) {
-                remindAtTime = nowTime;
-                isImmediate = true;
-            }
-
-            const existing = JSON.parse(localStorage.getItem('campus_event_reminders') || '[]');
-            const index = existing.findIndex(r => String(r.eventId) === String(currentEventId));
-
-            const minutesMap = { '30m': 30, '1h': 60, '3h': 180, '24h': 1440 };
-
-            const reminder = {
-                eventId: currentEventId,
-                eventTitle: loadedEvent.title || "Campus Event",
-                eventTime: eventStart.toISOString(),
-                remindAt: new Date(remindAtTime).toISOString(),
-                reminderMinutes: minutesMap[type],
-                triggered: false
-            };
-
-            if (index !== -1) {
-                // Update existing reminder instead of duplicating
-                existing[index] = reminder;
-            } else {
-                // Push new reminder normally
-                existing.push(reminder);
-            }
-
-            localStorage.setItem('campus_event_reminders', JSON.stringify(existing));
-
-            if (isImmediate) {
-                alert("Event starts soon. Reminder scheduled immediately.");
-            } else {
-                alert(`🔔 Reminder set for ${type === '24h' ? '1 day' : type.replace('m', ' min').replace('h', ' hour')} before the event!`);
-            }
-            render(loadedEvent);
-            closeModals();
         }
+
+        function confirmReminder() {
+            if (selectedReminderType) {
+                setReminder(selectedReminderType);
+            }
+        }
+
+        function setReminder(type) {
+    if (!authToken) return alert("Please Login first!");
+    if (!currentUser || currentUser.role !== 'student') return alert("Only students can set reminders.");
+    if (!loadedEvent || !loadedEvent.event_date || !loadedEvent.time) return alert("Missing event date/time!");
+
+    const deltaMap = {
+        '30m': 30 * 60 * 1000,
+        '1h': 60 * 60 * 1000,
+        '3h': 3 * 60 * 60 * 1000,
+        '24h': 24 * 60 * 60 * 1000
+    };
+
+    const eventStart = parseTimeToDate(
+        loadedEvent.event_date || loadedEvent.date_str,
+        loadedEvent.time
+    );
+
+    if (!eventStart) return alert("Could not parse event time.");
+
+    const triggerTime = eventStart.getTime() - deltaMap[type];
+
+    if (triggerTime <= Date.now()) {
+        return alert("Reminder time has already passed.");
+    }
+
+    let reminders = JSON.parse(localStorage.getItem("campus_event_reminders") || "[]");
+
+    const eventId = loadedEvent.id || currentEventId;
+    const reminderId = `event_${eventId}_${triggerTime}`;
+
+    const exists = reminders.some(r => r.id === reminderId);
+    if (exists) {
+        alert("Reminder already set.");
+        document.getElementById('remModal').classList.remove('active');
+        return;
+    }
+
+    reminders.push({
+        id: reminderId,
+        eventId: eventId,
+        title: loadedEvent.title || "Event",
+        triggerTime: triggerTime,
+        notified: false,
+        type: type,
+        eventLink: `/event_details.html?id=${eventId}`
+    });
+
+    localStorage.setItem("campus_event_reminders", JSON.stringify(reminders));
+
+    let labelMap = {
+        '30m': '30 minutes',
+        '1h': '1 hour',
+        '3h': '3 hours',
+        '24h': '1 day'
+    };
+
+    alert("Reminder has been set for " + labelMap[type]);
+
+    document.getElementById('remModal').classList.remove('active');
+
+    updateReminderUI();
+}
 
         function cancelReminder() {
             if (!confirm("Remove this reminder?")) return;
             const reminders = JSON.parse(localStorage.getItem('campus_event_reminders') || '[]');
             const filtered = reminders.filter(r => String(r.eventId) !== String(currentEventId));
             localStorage.setItem('campus_event_reminders', JSON.stringify(filtered));
-            render(loadedEvent);
+            updateReminderUI();
         }
 
-        function checkReminders() {
-            const reminders = JSON.parse(localStorage.getItem('campus_event_reminders') || '[]');
-            const now = new Date();
-            const nowTime = now.getTime();
-            let changed = false;
 
-            reminders.forEach(rem => {
-                const remindAt = new Date(rem.remindAt).getTime();
-
-                // Trigger if time is reached and not already triggered
-                if (remindAt <= nowTime && !rem.triggered) {
-                    triggerNotification(rem);
-                    rem.triggered = true;
-                    changed = true;
-                }
-            });
-
-            // Cleanup: remove reminders triggered > 1 hour ago
-            const oneHourAgo = nowTime - (60 * 60 * 1000);
-            const filtered = reminders.filter(rem => {
-                if (rem.triggered) {
-                    return new Date(rem.remindAt).getTime() > oneHourAgo;
-                }
-                return true;
-            });
-
-            if (changed || filtered.length !== reminders.length) {
-                localStorage.setItem('campus_event_reminders', JSON.stringify(filtered));
-            }
-        }
-
-        function triggerNotification(rem) {
-            // Mark as triggered and remove from storage to prevent multiple fires
-            const reminders = JSON.parse(localStorage.getItem('campus_event_reminders') || '[]');
-            const filtered = reminders.filter(r => String(r.eventId) !== String(rem.eventId));
-            localStorage.setItem('campus_event_reminders', JSON.stringify(filtered));
-
-            rem.triggered = true;
-
-            // Sound (Remote Bell)
-            try {
-                const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
-                audio.play().catch(() => { });
-            } catch (e) { }
-
-            // Behavioral logic based on visibility
-            if (document.hidden) {
-                // Background: Browser Notification
-                if (Notification.permission === 'granted') {
-                    const n = new Notification("🔔 Campus Connect Reminder", {
-                        body: `${rem.eventTitle} starts soon!`,
-                        icon: '/favicon.ico'
-                    });
-                    n.onclick = () => {
-                        window.open(`event_details.html?id=${rem.eventId}`, "_blank");
-                    };
-                }
-            } else {
-                // Foreground: Popup Modal
-                const triggerModal = document.getElementById('reminderTriggerModal');
-                document.getElementById('remTriggerText').textContent = `${rem.eventTitle} starts soon!`;
-                document.getElementById('remTriggerView').onclick = () => {
-                    window.location.href = `event_details.html?id=${rem.eventId}`;
-                };
-                triggerModal.classList.add('active');
-            }
-        }
 
         // Run checker every 20 seconds
-        setInterval(checkReminders, 20000);
 
-        // Visibility listener for robustness
-        document.addEventListener("visibilitychange", () => {
-            if (!document.hidden) {
-                checkReminders();
-            }
-        });
 
 
         document.getElementById('rateForm').onsubmit = async (e) => {
